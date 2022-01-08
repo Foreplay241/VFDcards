@@ -28,6 +28,7 @@ class Card(Button):
                 self.card_data["Class Title"] = CLASS_DICT[class_group][c]
                 self.card_data["Class Digit"] = c
             x += 1
+        self.chosen_VFD = "Vitality"
 
         self.front_image = self.generateImg()
         self.back_image = pg.Surface((128, 128))
@@ -36,6 +37,7 @@ class Card(Button):
         self.rect = self.image.get_rect()
 
         self.isFaceUp = False
+        self.selected = False
 
     def rotate_center(self, surf, image, pos, originPos, angle):
         img_rect = image.get_rect(topleft=(pos[0] - originPos[0], pos[1] - originPos[1]))
@@ -72,7 +74,7 @@ class Card(Button):
         alpha_img.blit(alpha_color, (0, 0), special_flags=pg.BLEND_RGB_MULT)
         baseImg.blit(alpha_img, (0, 0))
 
-    def addBetaPart(self, baseImg: pg.Surface, rotate=False, angle=90):
+    def addBetaPart(self, baseImg: pg.Surface, beta_digit: int, class_color: pg.Color):
         x = 0
         a = 0
         r, g, b, = 0, 0, 0
@@ -91,18 +93,14 @@ class Card(Button):
             if x == 5:
                 r += c
             x += 1
-        beta_img = pg.image.load(os.path.join('Cards/Characters/Triblocks', f"beta{a}.png")).convert_alpha()
+        beta_img = pg.image.load(os.path.join('Cards/Characters/Triblocks', f"beta{beta_digit}.png")).convert_alpha()
         beta_color = pg.Surface((128, 128))
-        beta_color.fill(PALE_VIOLET_RED)
+        beta_color.fill(class_color)
         beta_img.blit(beta_color, (0, 0), special_flags=pg.BLEND_RGB_MULT)
-        if rotate:
-            self.rotate_center(baseImg, beta_img, (64, 64), (64, 64), angle)
-        else:
-            baseImg.blit(beta_img, (0, 0))
+        baseImg.blit(beta_img, (0, 0))
 
-    def addGammaPart(self, baseImg: pg.Surface, rotate=False, angle=90):
+    def addGammaPart(self, baseImg: pg.Surface, gamma_digit: int, class_color: pg.Color):
         x = 0
-        a = 0
         r, g, b, = 0, 0, 0
         for c in map(int, str(self.card_data["Creation Number"])):
             if x == 0:
@@ -119,15 +117,14 @@ class Card(Button):
             if x == 5:
                 r += c
             x += 1
-        gamma_img = pg.image.load(os.path.join('Cards/Characters/Triblocks', f"gamma{a}.png")).convert_alpha()
+        gamma_img = pg.image.load(os.path.join('Cards/Characters/Triblocks', f"gamma{gamma_digit}.png")).convert_alpha()
         gamma_color = pg.Surface((128, 128))
-        gamma_color.fill(SAGE_GREEN)
+        gamma_color.fill(class_color)
         gamma_img.blit(gamma_color, (0, 0), special_flags=pg.BLEND_RGB_MULT)
         baseImg.blit(gamma_img, (0, 0))
 
-    def addDeltaPart(self, baseImg: pg.Surface, rotate=False, angle=90):
+    def addDeltaPart(self, baseImg: pg.Surface, delta_digit: int, class_color: pg.Color):
         x = 0
-        a = 0
         r, g, b, = 0, 0, 0
         for c in map(int, str(self.card_data["Creation Number"])):
             if x == 0:
@@ -144,12 +141,10 @@ class Card(Button):
             if x == 5:
                 r += c
             x += 1
-        delta_img = pg.image.load(os.path.join('Cards/Characters/Triblocks', f"delta{a}.png")).convert_alpha()
+        delta_img = pg.image.load(os.path.join('Cards/Characters/Triblocks', f"delta{delta_digit}.png")).convert_alpha()
         delta_color = pg.Surface((128, 128))
-        delta_color.fill(DARK_SLATE_BLUE)
+        delta_color.fill(class_color)
         delta_img.blit(delta_color, (0, 0), special_flags=pg.BLEND_RGB_MULT)
-        if rotate:
-            self.rotate_center(baseImg, delta_img, (64, 64), (64, 64))
         baseImg.blit(delta_img, (0, 0))
 
     def addEpsilonPart(self, baseImg: pg.Surface):
@@ -177,17 +172,41 @@ class Card(Button):
         epsilon_img.blit(epsilon_color, (0, 0), special_flags=pg.BLEND_RGB_MULT)
         baseImg.blit(epsilon_img, (0, 0))
 
-    def update_triblocks(self):
-        self.front_image = self.generateImg()
-
     def generateImg(self) -> pg.Surface:
         newImg = pg.Surface((128, 128))
         self.addAlphaPart(newImg)
-        self.addBetaPart(newImg, True, 120)
-        self.addGammaPart(newImg, True, 120)
-        self.addDeltaPart(newImg, True, 120)
+        if self.chosen_VFD == "Vitality":
+            self.addBetaPart(newImg, self.card_data["Vitality"], VITALITY_RED)
+            self.addGammaPart(newImg, self.card_data["Finesse"], FINESSE_GREEN)
+            self.addDeltaPart(newImg, self.card_data["Divination"], DIVINATION_BLUE)
+        elif self.chosen_VFD == "Finesse":
+            self.addBetaPart(newImg, self.card_data["Finesse"], FINESSE_GREEN)
+            self.addGammaPart(newImg, self.card_data["Divination"], DIVINATION_BLUE)
+            self.addDeltaPart(newImg, self.card_data["Vitality"], VITALITY_RED)
+        elif self.chosen_VFD == "Divination":
+            self.addBetaPart(newImg, self.card_data["Divination"], DIVINATION_BLUE)
+            self.addGammaPart(newImg, self.card_data["Vitality"], VITALITY_RED)
+            self.addDeltaPart(newImg, self.card_data["Finesse"], FINESSE_GREEN)
         self.addEpsilonPart(newImg)
         return newImg
+
+    # def generateImg(self) -> pg.Surface:
+    #     newImg = pg.Surface((128, 128))
+    #     self.addAlphaPart(newImg)
+    #     if self.chosen_VFD == "Vitality":
+    #         self.addBetaPart(newImg, self.card_data["Vitality"], COLOR_DICT["Melee"][self.card_data["Class Digit"]])
+    #         self.addGammaPart(newImg, self.card_data["Finesse"], COLOR_DICT["Ranged"][self.card_data["Class Digit"]])
+    #         self.addDeltaPart(newImg, self.card_data["Divination"], COLOR_DICT["Magic"][self.card_data["Class Digit"]])
+    #     elif self.chosen_VFD == "Finesse":
+    #         self.addBetaPart(newImg, self.card_data["Finesse"], COLOR_DICT["Ranged"][self.card_data["Class Digit"]])
+    #         self.addGammaPart(newImg, self.card_data["Divination"], COLOR_DICT["Magic"][self.card_data["Class Digit"]])
+    #         self.addDeltaPart(newImg, self.card_data["Vitality"], COLOR_DICT["Melee"][self.card_data["Class Digit"]])
+    #     elif self.chosen_VFD == "Divination":
+    #         self.addBetaPart(newImg, self.card_data["Divination"], COLOR_DICT["Magic"][self.card_data["Class Digit"]])
+    #         self.addGammaPart(newImg, self.card_data["Vitality"], COLOR_DICT["Melee"][self.card_data["Class Digit"]])
+    #         self.addDeltaPart(newImg, self.card_data["Finesse"], COLOR_DICT["Ranged"][self.card_data["Class Digit"]])
+    #     self.addEpsilonPart(newImg)
+    #     return newImg
 
     def flip_card(self):
         self.isFaceUp = not self.isFaceUp
@@ -201,3 +220,5 @@ class Card(Button):
 
     def draw(self, window):
         super(Card, self).draw(window)
+        if self.selected:
+            pg.draw.rect(window, GREY25, self.rect, 4)

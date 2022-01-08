@@ -25,6 +25,9 @@ class Game(GameState):
         for e in persistent["Enemy's Party"]:
             newCharacter = Character(e["Name"], e["Creation Number"], e["Class Group"], e["Card Type"],
                                      col=b+1, max_col=4, row=1, max_row=15)
+            newCharacter.chosen_VFD = random.choice(["Vitality", "Finesse", "Divination"])
+            newCharacter.front_image = newCharacter.generateImg()
+            newCharacter.front_image = pg.transform.flip(newCharacter.front_image, False, True)
             self.enemys_party.append(newCharacter)
             self.all_buttons.append(newCharacter)
             b += 1
@@ -33,14 +36,35 @@ class Game(GameState):
         super(Game, self).get_event(event)
         if event.type == pg.MOUSEBUTTONDOWN:
             for pc in self.players_party:
+                pc.selected = False
                 if pc.rect.collidepoint(self.mouse_pos):
-                    if self.mouse_pos[0] <= 63:
-                        pc.rotate_triblocks(120)
-                    if self.mouse_pos[0] > 64:
-                        pc.rotate_triblocks(240)
+                    pc.selected = True
         if event.type == pg.KEYDOWN:
+            if event.key == pg.K_p:
+                self.persist = {
+                    "Player's Party": self.players_party,
+                    "Enemy's Party": self.enemys_party
+                }
+                self.next_state_name = "PAUSE_MENU"
+                self.done = True
+            if event.key == pg.K_SPACE:
+                for ec in self.enemys_party:
+                    ec.flip_card()
             if event.key == pg.K_v:
-                pass
+                for pc in self.players_party:
+                    if pc.selected:
+                        pc.chosen_VFD = "Vitality"
+                        pc.update_image(pc.generateImg(), pc.generateImg())
+            if event.key == pg.K_f:
+                for pc in self.players_party:
+                    if pc.selected:
+                        pc.chosen_VFD = "Finesse"
+                        pc.update_image(pc.generateImg(), pc.generateImg())
+            if event.key == pg.K_d:
+                for pc in self.players_party:
+                    if pc.selected:
+                        pc.chosen_VFD = "Divination"
+                        pc.update_image(pc.generateImg(), pc.generateImg())
 
     def update(self, dt):
         super(Game, self).update(dt)
