@@ -37,6 +37,15 @@ class Card(Button):
 
         self.isFaceUp = False
 
+    def rotate_center(self, surf, image, pos, originPos, angle):
+        img_rect = image.get_rect(topleft=(pos[0] - originPos[0], pos[1] - originPos[1]))
+        offset_center_to_pivot = pg.math.Vector2(pos) - img_rect.center
+        rotated_offset = offset_center_to_pivot.rotate(-angle)
+        rotated_image_center = (pos[0] - rotated_offset.x, pos[1] - rotated_offset.y)
+        rotated_image = pg.transform.rotate(image, angle)
+        rotated_image_rect = rotated_image.get_rect(center=rotated_image_center)
+        surf.blit(rotated_image, rotated_image_rect)
+
     def addAlphaPart(self, baseImg: pg.Surface):
         x = 0
         a = 0
@@ -63,7 +72,7 @@ class Card(Button):
         alpha_img.blit(alpha_color, (0, 0), special_flags=pg.BLEND_RGB_MULT)
         baseImg.blit(alpha_img, (0, 0))
 
-    def addBetaPart(self, baseImg: pg.Surface):
+    def addBetaPart(self, baseImg: pg.Surface, rotate=False, angle=90):
         x = 0
         a = 0
         r, g, b, = 0, 0, 0
@@ -86,9 +95,12 @@ class Card(Button):
         beta_color = pg.Surface((128, 128))
         beta_color.fill(PALE_VIOLET_RED)
         beta_img.blit(beta_color, (0, 0), special_flags=pg.BLEND_RGB_MULT)
-        baseImg.blit(beta_img, (0, 0))
+        if rotate:
+            self.rotate_center(baseImg, beta_img, (64, 64), (64, 64), angle)
+        else:
+            baseImg.blit(beta_img, (0, 0))
 
-    def addGammaPart(self, baseImg: pg.Surface):
+    def addGammaPart(self, baseImg: pg.Surface, rotate=False, angle=90):
         x = 0
         a = 0
         r, g, b, = 0, 0, 0
@@ -113,7 +125,7 @@ class Card(Button):
         gamma_img.blit(gamma_color, (0, 0), special_flags=pg.BLEND_RGB_MULT)
         baseImg.blit(gamma_img, (0, 0))
 
-    def addDeltaPart(self, baseImg: pg.Surface):
+    def addDeltaPart(self, baseImg: pg.Surface, rotate=False, angle=90):
         x = 0
         a = 0
         r, g, b, = 0, 0, 0
@@ -136,6 +148,8 @@ class Card(Button):
         delta_color = pg.Surface((128, 128))
         delta_color.fill(DARK_SLATE_BLUE)
         delta_img.blit(delta_color, (0, 0), special_flags=pg.BLEND_RGB_MULT)
+        if rotate:
+            self.rotate_center(baseImg, delta_img, (64, 64), (64, 64))
         baseImg.blit(delta_img, (0, 0))
 
     def addEpsilonPart(self, baseImg: pg.Surface):
@@ -169,9 +183,9 @@ class Card(Button):
     def generateImg(self) -> pg.Surface:
         newImg = pg.Surface((128, 128))
         self.addAlphaPart(newImg)
-        self.addBetaPart(newImg)
-        self.addGammaPart(newImg)
-        self.addDeltaPart(newImg)
+        self.addBetaPart(newImg, True, 120)
+        self.addGammaPart(newImg, True, 120)
+        self.addDeltaPart(newImg, True, 120)
         self.addEpsilonPart(newImg)
         return newImg
 
