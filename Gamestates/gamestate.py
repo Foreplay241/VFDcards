@@ -29,6 +29,7 @@ class GameState(object):
         Handle a single event passed by the Game object.
         """
         if event.type == pg.QUIT:
+            self.quit = True
             pg.quit()
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_ESCAPE:
@@ -43,6 +44,8 @@ class GameState(object):
 
         dt: time since last frame
         """
+        if self.quit:
+            pg.quit()
         for ab in self.all_buttons:
             ab.update()
 
