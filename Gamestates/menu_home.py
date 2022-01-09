@@ -169,8 +169,8 @@ class HomeMenu(Menu):
             if self.enter_battle_button.rect.collidepoint(self.mouse_pos):
                 if len(self.player_character_list) == self.max_party_size:
                     self.persist = {
-                        "Player's Party": self.player_character_list,
-                        "Enemy's Party": self.enemy_character_list
+                        "Player's new Party": self.player_character_list,
+                        "Enemy's new Party": self.enemy_character_list
                     }
                     self.next_state_name = "GAME"
                     self.done = True

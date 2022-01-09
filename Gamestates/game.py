@@ -14,22 +14,22 @@ class Game(GameState):
     def startup(self, persistent):
         x = 0
         b = 0
-        for p in persistent["Player's Party"]:
-            newCharacter = Character(p["Name"], p["Creation Number"], p["Class Group"], p["Card Type"],
-                                     col=x+1, max_col=4, row=10, max_row=15)
-            newCharacter.flip_card()
-            self.players_party.append(newCharacter)
-            self.all_buttons.append(newCharacter)
+        for p in persistent["Player's new Party"]:
+            new_character = Character(p["Name"], p["Creation Number"], p["Class Group"], p["Card Type"],
+                                      col=x + 1, max_col=4, row=10, max_row=15)
+            new_character.flip_card()
+            self.players_party.append(new_character)
+            self.all_buttons.append(new_character)
             x += 1
-            print(newCharacter.card_data)
-        for e in persistent["Enemy's Party"]:
-            newCharacter = Character(e["Name"], e["Creation Number"], e["Class Group"], e["Card Type"],
-                                     col=b+1, max_col=4, row=1, max_row=15)
-            newCharacter.chosen_VFD = random.choice(["Vitality", "Finesse", "Divination"])
-            newCharacter.front_image = newCharacter.generateImg()
-            newCharacter.front_image = pg.transform.flip(newCharacter.front_image, False, True)
-            self.enemys_party.append(newCharacter)
-            self.all_buttons.append(newCharacter)
+            print(new_character.card_data)
+        for e in persistent["Enemy's new Party"]:
+            new_character = Character(e["Name"], e["Creation Number"], e["Class Group"], e["Card Type"],
+                                      col=b + 1, max_col=4, row=1, max_row=15)
+            new_character.chosen_VFD = random.choice(["Vitality", "Finesse", "Divination"])
+            new_character.front_image = new_character.generateImg()
+            new_character.front_image = pg.transform.flip(new_character.front_image, False, True)
+            self.enemys_party.append(new_character)
+            self.all_buttons.append(new_character)
             b += 1
 
     def get_event(self, event):
