@@ -1,3 +1,4 @@
+from Cards import card
 from Cards.card import Card
 from Cards.character_card import Character
 from GUI.button import Button
@@ -10,6 +11,7 @@ class Game(GameState):
         super().__init__()
         self.players_party = []
         self.enemys_party = []
+        self.char_pos = 0
 
     def startup(self, persistent):
         x = 0
@@ -23,6 +25,7 @@ class Game(GameState):
                 self.all_buttons.append(new_character)
                 x += 1
                 print(new_character.card_data)
+        if "Enemy's new Party" in persistent:
             for e in persistent["Enemy's new Party"]:
                 new_character = Character(e["Name"], e["Creation Number"], e["Class Group"], e["Card Type"],
                                           col=b + 1, max_col=4, row=1, max_row=15)
@@ -32,9 +35,6 @@ class Game(GameState):
                 self.enemys_party.append(new_character)
                 self.all_buttons.append(new_character)
                 b += 1
-        if "Player's Party" in persistent:
-            self.players_party = persistent["Player's Party"]
-            self.enemys_party = persistent["Enemy's Party"]
 
     def get_event(self, event):
         super(Game, self).get_event(event)
@@ -42,6 +42,7 @@ class Game(GameState):
             for pc in self.players_party:
                 pc.selected = False
                 if pc.rect.collidepoint(self.mouse_pos):
+                    self.char_pos = self.players_party.index(pc)
                     pc.selected = True
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_p:
@@ -52,8 +53,10 @@ class Game(GameState):
                 self.next_state_name = "PAUSE_MENU"
                 self.done = True
             if event.key == pg.K_SPACE:
-                for ec in self.enemys_party:
-                    ec.flip_card()
+                self.character_battle(self.char_pos)
+                # for ec in self.enemys_party:
+                #     ec.isFaceUp = False
+                #     ec.flip_card()
             if event.key == pg.K_v:
                 for pc in self.players_party:
                     if pc.selected:
@@ -70,7 +73,28 @@ class Game(GameState):
                         pc.chosen_VFD = "Divination"
                         pc.update_image(pc.generateImg(), pc.generateImg())
 
+    def character_battle(self, character_position: int):
+        player = self.players_party[character_position]
+        enemy = self.enemys_party[character_position]
+        player.row -= 2
+        enemy.row += 2
+        enemy.isFaceUp = False
+        enemy.flip_card()
+        if player.card_data[player.chosen_VFD] - enemy.card_data[enemy.chosen_VFD] > 0:
+            player.isWinner = True
+            enemy.row -= 2
+        else:
+            player.isWinner = False
+            player.row += 2
+
     def update(self, dt):
+        for pc in self.players_party:
+            if not pc.isWinner and pc.hasBattled:
+                pc.kill()
+        for ec in self.enemys_party:
+            if not ec.isWinner and ec.hasBattled:
+                ec.kill()
+
         super(Game, self).update(dt)
 
     def draw(self, surface: pg.Surface):
