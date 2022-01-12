@@ -2,6 +2,7 @@ from Cards import card
 from Cards.card import Card
 from Cards.character_card import Character
 from GUI.button import Button
+from GUI.text_button import TextButton
 from Gamestates.gamestate import GameState
 from settings import *
 
@@ -12,6 +13,7 @@ class Game(GameState):
         self.players_party = []
         self.enemys_party = []
         self.char_pos = 0
+        self.battle_winners = []
 
     def startup(self, persistent):
         x = 0
@@ -54,9 +56,6 @@ class Game(GameState):
                 self.done = True
             if event.key == pg.K_SPACE:
                 self.character_battle(self.char_pos)
-                # for ec in self.enemys_party:
-                #     ec.isFaceUp = False
-                #     ec.flip_card()
             if event.key == pg.K_v:
                 for pc in self.players_party:
                     if pc.selected:
@@ -76,24 +75,29 @@ class Game(GameState):
     def character_battle(self, character_position: int):
         player = self.players_party[character_position]
         enemy = self.enemys_party[character_position]
-        player.row -= 2
-        enemy.row += 2
-        enemy.isFaceUp = False
-        enemy.flip_card()
-        if player.card_data[player.chosen_VFD] - enemy.card_data[enemy.chosen_VFD] > 0:
-            player.isWinner = True
-            enemy.row -= 2
-        else:
-            player.isWinner = False
-            player.row += 2
+        if not player.hasBattled:
+            player.row -= 2
+            enemy.row += 2
+            enemy.isFaceUp = False
+            enemy.flip_card()
+            if player.card_data[player.chosen_VFD] - enemy.card_data[enemy.chosen_VFD] > 0:
+                player.isWinner = True
+                enemy.row -= 2
+                self.battle_winners.append(player)
+            else:
+                player.isWinner = False
+                player.row += 2
+                self.battle_winners.append(enemy)
+            player.hasBattled = True
+            enemy.hasBattled = True
 
     def update(self, dt):
-        for pc in self.players_party:
-            if not pc.isWinner and pc.hasBattled:
-                pc.kill()
-        for ec in self.enemys_party:
-            if not ec.isWinner and ec.hasBattled:
-                ec.kill()
+        if len(self.battle_winners) == 3:
+            self.persist = {
+                "Winners Circle": self.battle_winners
+            }
+            self.next_state_name = "OUTCOME_MENU"
+            self.done = True
 
         super(Game, self).update(dt)
 

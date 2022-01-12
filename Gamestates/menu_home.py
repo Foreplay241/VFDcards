@@ -62,7 +62,7 @@ class HomeMenu(Menu):
         self.max_party_size = 3
         self.prev_name = None
         self.next_name = None
-        self.name_character_button = TextButton("H0", (0, 0), (0, 0), (0, 0), text=random.choice(EXAMPLE_NAMES),
+        self.name_character_button = TextButton("H0", (0, 0), (0, 0), (0, 0), text="Clicking here will pick a random name",
                                                 textcolor=WHITE_SMOKE, bgColor=SPACE_GREY,
                                                 optiontext="", optioncolor=LIGHT_SLATE_BLUE, fontsize=22,
                                                 col=1, max_col=2, row=1, max_row=12, canEdit=True,
@@ -74,7 +74,7 @@ class HomeMenu(Menu):
         self.character_card_preview = Button("H2", (0, 0), (128, 128), (128, 128),
                                              col=1, max_col=2, row=3, max_row=12)
         self.add_character_to_party_button = TextButton("H3", (0, 0), (0, 0), (0, 0),
-                                                        text=f"Add {self.name_character_button.text}",
+                                                        text=f"Broken button for now",
                                                         textcolor=WHITE_SMOKE, bgColor=SPACE_GREY,
                                                         optiontext="", optioncolor=LIGHT_SLATE_BLUE, fontsize=22,
                                                         col=1, max_col=3, row=6, max_row=12, maxWidth=210)
@@ -89,10 +89,15 @@ class HomeMenu(Menu):
         self.third_character_card = Button("H6", (0, 0), (128, 128), (128, 128),
                                            col=3, max_col=4, row=7, max_row=12)
         self.enter_battle_button = TextButton("H7", (0, 0), (0, 0), (0, 0),
-                                              text=f"Enter battle",
+                                              text=f"Enter game",
                                               textcolor=WHITE_SMOKE, bgColor=SPACE_GREY,
                                               optiontext="", optioncolor=LIGHT_SLATE_BLUE, fontsize=22,
-                                              col=1, max_col=2, row=10, max_row=12, maxWidth=420)
+                                              col=1, max_col=3, row=10, max_row=12, maxWidth=210)
+        self.enter_tutorial_button = TextButton("H7", (0, 0), (0, 0), (0, 0),
+                                                text=f"Tutorial",
+                                                textcolor=WHITE_SMOKE, bgColor=SPACE_GREY,
+                                                optiontext="", optioncolor=LIGHT_SLATE_BLUE, fontsize=22,
+                                                col=2, max_col=3, row=10, max_row=12, maxWidth=210)
         self.text_buttons.append(self.name_character_button)
         self.text_buttons.append(self.generate_character_button)
         self.text_buttons.append(self.generate_random_team_button)
@@ -101,6 +106,7 @@ class HomeMenu(Menu):
         self.all_buttons.append(self.generate_character_button)
         self.all_buttons.append(self.add_character_to_party_button)
         self.all_buttons.append(self.enter_battle_button)
+        self.all_buttons.append(self.enter_tutorial_button)
         self.all_buttons.append(self.generate_random_team_button)
 
         self.all_buttons.append(self.character_card_preview)
@@ -141,8 +147,6 @@ class HomeMenu(Menu):
                         self.player_character_list.append(self.new_card_data)
                         self.enemy_character_list.append(self.new_card_data)
                         self.character_name_list.append(self.new_card_data["Name"])
-                for character in self.player_character_list:
-                    print(character)
             if self.generate_random_team_button.rect.collidepoint(self.mouse_pos):
                 self.player_character_list = []
                 self.enemy_character_list = []
@@ -150,15 +154,14 @@ class HomeMenu(Menu):
                     new_character_data = generate_new_card_data(name=random.choice(EXAMPLE_NAMES),
                                                                 creation_time=random.randint(100000, 999999),
                                                                 card_type="Character",
-                                                                class_group="Magic")
+                                                                class_group=random.choice(CLASS_GROUPS))
                     new_enemy_data = generate_new_card_data(name=random.choice(EXAMPLE_NAMES),
                                                             creation_time=random.randint(100000, 999999),
                                                             card_type="Enemy Character",
-                                                            class_group="Melee")
+                                                            class_group=random.choice(CLASS_GROUPS))
                     self.player_character_list.append(new_character_data)
                     self.enemy_character_list.append(new_enemy_data)
                     self.character_name_list.append(self.new_card_data["Name"])
-                # self.first_character_card.image.fill(BLACK)
                 self.first_character_card.update_image(pg.Surface((128, 128)),
                                                        generate_card_preview(self.player_character_list[0]))
                 self.second_character_card.update_image(pg.Surface((128, 128)),
@@ -173,6 +176,15 @@ class HomeMenu(Menu):
                         "Enemy's new Party": self.enemy_character_list
                     }
                     self.next_state_name = "GAME"
+                    self.done = True
+
+            if self.enter_tutorial_button.rect.collidepoint(self.mouse_pos):
+                if len(self.player_character_list) == self.max_party_size:
+                    self.persist = {
+                        "Player's new Party": self.player_character_list,
+                        "Enemy's new Party": self.enemy_character_list
+                    }
+                    self.next_state_name = "TUTORIAL"
                     self.done = True
 
         if event.type == pg.KEYDOWN:

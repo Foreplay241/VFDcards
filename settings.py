@@ -273,8 +273,8 @@ RANDOM_GREEN = (random.randint(0, 125), random.randint(185, 255), random.randint
 RANDOM_BLUE = (random.randint(0, 125), random.randint(0, 125), random.randint(185, 255))
 
 EXAMPLE_NAMES = [
-    "Numo Julio", "Windel Moris-ko", "UnDah Bilowen", "Ashia Manekot", "LoGey Mellon",
-    "Kappa Aggie", "LoKil Shontor", "HmKalla RoMinta"
+    "Numo", "Windel", "Moris-ko", "UnDah", "Bilowen", "Ashia", "Manekot", "LoGey", "Mellon",
+    "Kappa", "Aggie", "LoKul", "Shondora", "HuKalta", "RoMinta"
 ]
 
 COLOR_DICT = {

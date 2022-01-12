@@ -8,7 +8,7 @@ class TextButton(Button):
                  text="TEXT", textcolor=BLACK, bgColor=SPACE_GREY,
                  optiontext=None, optioncolor=RANDOM_GREEN,
                  valuetext=None, valuecolor=FREE_SPEECH_GREEN,
-                 fontsize=16, col=1, max_col=3, row=1, max_row=3, canEdit=False, maxWidth=200):
+                 fontsize=16, col=0, max_col=0, row=0, max_row=0, canEdit=False, maxWidth=200):
         """
 
         :param id_num: unique id number per button
@@ -60,9 +60,9 @@ class TextButton(Button):
         self.render()
 
     def update(self):
+        # self.rect.x = (DISPLAY_WIDTH * self.column) // self.max_column - (self.image.get_width() // 2)
+        # self.rect.y = (DISPLAY_HEIGHT * self.row) // self.max_row
         super(TextButton, self).update()
-        self.rect.x = (DISPLAY_WIDTH * self.column) // self.max_column - (self.image.get_width() // 2)
-        self.rect.y = (DISPLAY_HEIGHT * self.row) // self.max_row
 
     def set_font(self):
         self.font = pg.font.Font(self.fontname, self.font_size)

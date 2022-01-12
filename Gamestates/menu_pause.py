@@ -22,6 +22,7 @@ class PauseMenu(Menu):
                 }
                 self.next_state_name = "GAME"
                 self.done = True
+        super(PauseMenu, self).get_event(event)
 
     def update(self, dt):
         super(PauseMenu, self).update(dt)

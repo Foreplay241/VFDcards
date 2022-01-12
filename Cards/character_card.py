@@ -15,3 +15,6 @@ class Character(Card):
         self.card_data["Vitality"] = VFDscore[0]
         self.card_data["Finesse"] = VFDscore[1]
         self.card_data["Divination"] = VFDscore[2]
+
+    def lost_battle(self):
+        self.kill()

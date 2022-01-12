@@ -1,4 +1,5 @@
 from Gamestates.menu import Menu
+from settings import *
 import pygame as pg
 
 
@@ -17,7 +18,7 @@ class OutcomeMenu(Menu):
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_n:
                 self.persist = {}
-                self.next_state_name = "HOME MENU"
+                self.next_state_name = "HOME_MENU"
                 self.done = True
         if event.type == pg.MOUSEBUTTONDOWN:
             pass
@@ -26,5 +27,6 @@ class OutcomeMenu(Menu):
     def update(self, dt):
         super(OutcomeMenu, self).update(dt)
 
-    def draw(self, surface):
+    def draw(self, surface: pg.Surface):
+        surface.fill(GREY75)
         super(OutcomeMenu, self).draw(surface)

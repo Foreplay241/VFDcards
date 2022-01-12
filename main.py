@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 from Gamestates.game import Game
+from Gamestates.game_tutorial import TutorialGame
 from Gamestates.menu_home import HomeMenu
+from Gamestates.menu_outcome import OutcomeMenu
 from Gamestates.menu_pause import PauseMenu
 from settings import *
 
@@ -77,7 +79,9 @@ if __name__ == '__main__':
     GAME_STATES = {
         "HOME_MENU": HomeMenu(),
         "PAUSE_MENU": PauseMenu(),
-        "GAME": Game()
+        "OUTCOME_MENU": OutcomeMenu(),
+        "GAME": Game(),
+        "TUTORIAL": TutorialGame()
         }
     app = App(SCREEN, GAME_STATES)
     app.run()

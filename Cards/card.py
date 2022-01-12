@@ -168,8 +168,13 @@ class Card(Button):
             x += 1
         epsilon_img = pg.image.load(os.path.join('Cards/Characters/Triblocks', f"epsilon{a}.png")).convert_alpha()
         epsilon_color = pg.Surface((128, 128))
+        epsilon_text = pg.font.Font(None, 22).render(self.card_data["Name"], True,
+                                                     COLOR_DICT[random.choice(CLASS_GROUPS)][self.card_data["Class Digit"]])
+        if self.card_data["Card Type"].startswith("Enemy"):
+            epsilon_text = pg.transform.flip(epsilon_text, False, True)
         epsilon_color.fill(pg.Color(r, g, b))
         epsilon_img.blit(epsilon_color, (0, 0), special_flags=pg.BLEND_RGB_MULT)
+        epsilon_img.blit(epsilon_text, (10, 108))
         baseImg.blit(epsilon_img, (0, 0))
 
     def generateImg(self) -> pg.Surface:

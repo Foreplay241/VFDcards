@@ -15,5 +15,5 @@ class Menu(GameState):
     def update(self, dt):
         super(Menu, self).update(dt)
 
-    def draw(self, surface):
+    def draw(self, surface: pg.Surface):
         super(Menu, self).draw(surface)
