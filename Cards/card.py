@@ -17,6 +17,7 @@ class Card(Button):
             "Card Type": card_type
         }
         x = 0
+        # PROCESSES THE CREATION NUMBER FOR THE VFD-SCORE AND CHARACTER CLASS INFO
         for c in map(int, str(creation_number)):
             if x == 0:
                 self.card_data["Vitality"] = c

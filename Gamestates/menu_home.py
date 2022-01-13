@@ -118,7 +118,7 @@ class HomeMenu(Menu):
         self.all_buttons.append(self.third_character_card)
 
     def startup(self, persistent):
-        pass
+        super(HomeMenu, self).startup(persistent)
 
     def get_event(self, event):
         super(HomeMenu, self).get_event(event)

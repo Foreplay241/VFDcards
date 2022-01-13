@@ -18,6 +18,7 @@ class Game(GameState):
     def startup(self, persistent):
         x = 0
         b = 0
+        self.battle_winners = []
         if "Player's new Party" in persistent:
             for p in persistent["Player's new Party"]:
                 new_character = Character(p["Name"], p["Creation Number"], p["Class Group"], p["Card Type"],
@@ -26,7 +27,7 @@ class Game(GameState):
                 self.players_party.append(new_character)
                 self.all_buttons.append(new_character)
                 x += 1
-                print(new_character.card_data)
+                # print(new_character.card_data)
         if "Enemy's new Party" in persistent:
             for e in persistent["Enemy's new Party"]:
                 new_character = Character(e["Name"], e["Creation Number"], e["Class Group"], e["Card Type"],
@@ -37,6 +38,7 @@ class Game(GameState):
                 self.enemys_party.append(new_character)
                 self.all_buttons.append(new_character)
                 b += 1
+        super(Game, self).startup(persistent)
 
     def get_event(self, event):
         super(Game, self).get_event(event)
@@ -59,8 +61,7 @@ class Game(GameState):
             if event.key == pg.K_v:
                 for pc in self.players_party:
                     if pc.selected:
-                        pc.chosen_VFD = "Vitality"
-                        pc.update_image(pc.generateImg(), pc.generateImg())
+                        pc.switch_to("Vitality")
             if event.key == pg.K_f:
                 for pc in self.players_party:
                     if pc.selected:
@@ -94,7 +95,8 @@ class Game(GameState):
     def update(self, dt):
         if len(self.battle_winners) == 3:
             self.persist = {
-                "Winners Circle": self.battle_winners
+                "Player's Party": self.players_party,
+                "Enemy's Party": self.enemys_party,
             }
             self.next_state_name = "OUTCOME_MENU"
             self.done = True

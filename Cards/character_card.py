@@ -11,6 +11,10 @@ class Character(Card):
         self.hasBattled = False
         self.isWinner = False
 
+    def switch_to(self, new_VFD: str):
+        self.chosen_VFD = new_VFD
+        self.update_image(self.generateImg(), pg.Surface((0, 0)))
+
     def update_VFD_score(self, VFDscore):
         self.card_data["Vitality"] = VFDscore[0]
         self.card_data["Finesse"] = VFDscore[1]

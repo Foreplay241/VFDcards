@@ -7,7 +7,7 @@ class Menu(GameState):
         super().__init__()
 
     def startup(self, persistent):
-        pass
+        super(Menu, self).startup(persistent)
 
     def get_event(self, event):
         super(Menu, self).get_event(event)

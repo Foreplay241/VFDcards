@@ -15,7 +15,7 @@ class GameState(object):
         self.all_buttons = []
         self.text_buttons = []
 
-    def startup(self, persistent):
+    def startup(self, persistent: dict):
         """
         Called when a state resumes being active.
         Allows information to be passed between states.
@@ -23,8 +23,9 @@ class GameState(object):
         persistent: a dict passed from state to state
         """
         self.persist = persistent
+        print(self.persist.keys())
 
-    def get_event(self, event):
+    def get_event(self, event: pg.event):
         """
         Handle a single event passed by the Game object.
         """
@@ -37,7 +38,7 @@ class GameState(object):
         if event.type == pg.MOUSEMOTION:
             self.mouse_pos = pg.mouse.get_pos()
 
-    def update(self, dt):
+    def update(self, dt: float):
         """
         Update the state. Called by the Game object once
         per frame.
@@ -49,7 +50,7 @@ class GameState(object):
         for ab in self.all_buttons:
             ab.update()
 
-    def draw(self, surface):
+    def draw(self, surface: pg.surface):
         """
         Draw everything to the screen.
         """
