@@ -12,13 +12,22 @@ class Game(GameState):
         super().__init__()
         self.players_party = []
         self.enemys_party = []
-        self.char_pos = 0
+        self.char_pos = random.randint(0, 2)
         self.battle_winners = []
+        self.num_of_battles = 0
 
     def startup(self, persistent):
         x = 0
         b = 0
+        self.num_of_battles = 0
         self.battle_winners = []
+        if "Player's Party" in persistent:
+            self.players_party = persistent["Player's Party"]
+            for pc in self.players_party:
+                self.all_buttons.append(pc)
+            self.players_party = persistent["Enemy's Party"]
+            for pc in self.players_party:
+                self.all_buttons.append(pc)
         if "Player's new Party" in persistent:
             for p in persistent["Player's new Party"]:
                 new_character = Character(p["Name"], p["Creation Number"], p["Class Group"], p["Card Type"],
@@ -85,9 +94,12 @@ class Game(GameState):
                 player.isWinner = True
                 enemy.row -= 2
                 self.battle_winners.append(player)
+            elif player.card_data[player.chosen_VFD] - enemy.card_data[enemy.chosen_VFD] == 0:
+                player.isWinner = False
             else:
                 player.isWinner = False
                 player.row += 2
+                player.kill()
                 self.battle_winners.append(enemy)
             player.hasBattled = True
             enemy.hasBattled = True

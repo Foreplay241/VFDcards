@@ -49,17 +49,6 @@ DISPLAY_BOTTOM_CENTER = (DISPLAY_WIDTH_CENTER, DISPLAY_HEIGHT)
 DISPLAY_BOTTOM_LEFT = (DISPLAY_LEFT, DISPLAY_HEIGHT)
 DISPLAY_LEFT_CENTER = (DISPLAY_LEFT, DISPLAY_HEIGHT_CENTER)
 
-CLASS_GROUPS = ["Melee", "Ranged", "Magic"]
-CLASS_DICT = {
-    "Melee": ["Warrior", "Berserker", "Soldier", "Knight", "Paladin",
-              "Sell-sword", "Gladiator", "Samurai", "Brawler", "Dragoon"],
-    "Ranged": ["Archer", "Ranger", "Pirate", "Beast-Master", "Hunter",
-               "Ninja", "Monk", "Axe-thrower", "Druid", "Assassin"],
-    "Magic": ["Wizard", "Priest", "Cleric", "Mage", "Seer",
-              "Warlock", "Witch", "Shaman", "Necromancer", "BattleMage"]
-}
-CARD_TYPES = ["Action", "Character", "Equipment"]
-
 # PRIMARY COLORS
 LIGHT_RED = (230, 173, 216)
 LIGHT_GREEN = (216, 230, 173)
@@ -277,6 +266,7 @@ EXAMPLE_NAMES = [
     "Kappa", "Aggie", "LoKul", "Shondora", "HuKalta", "RoMinta"
 ]
 
+CLASS_GROUPS = ["Melee", "Ranged", "Magic"]
 COLOR_DICT = {
     "Melee": [RED, DARK_RED, LIGHT_RED, PALE_VIOLET_RED, VITALITY_RED, ORANGE_RED,
               FREE_SPEECH_RED, MEDIUM_VIOLET_RED, INDIAN_RED, RANDOM_RED],
@@ -285,7 +275,17 @@ COLOR_DICT = {
     "Magic": [BLUE, BLUE_4, SKY_BLUE, CORN_FLOWER_BLUE, STEEL_BLUE, TRUE_IRIS_BLUE,
               DIVINATION_BLUE, POWDER_BLUE, NEW_MIDNIGHT_BLUE, LIGHT_STEEL_BLUE]
 }
-melee_color_list = [RANDOM_COLOR, RANDOM_COLOR2, RANDOM_COLOR3,
+CLASS_DICT = {
+    "Melee": ["Warrior", "Berserker", "Soldier", "Knight", "Paladin",
+              "Sell-sword", "Gladiator", "Samurai", "Brawler", "Dragoon"],
+    "Ranged": ["Archer", "Ranger", "Pirate", "Beast-Master", "Hunter",
+               "Ninja", "Monk", "Axe-thrower", "Druid", "Assassin"],
+    "Magic": ["Wizard", "Priest", "Cleric", "Mage", "Seer",
+              "Warlock", "Witch", "Shaman", "Necromancer", "BattleMage"]
+}
+CARD_TYPES = ["Action", "Character", "Equipment"]
+
+random_color_list = [RANDOM_COLOR, RANDOM_COLOR2, RANDOM_COLOR3,
                     RANDOM_RED, RANDOM_GREEN, RANDOM_BLUE,
                     QUARTZ, BISQUE, MANDARIN_ORANGE, CADET_BLUE]
 

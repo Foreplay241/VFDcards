@@ -17,19 +17,39 @@ class Card(Button):
             "Card Type": card_type
         }
         x = 0
+        first_highest = 0
+        second_highest = 0
+        third_highest = 0
         # PROCESSES THE CREATION NUMBER FOR THE VFD-SCORE AND CHARACTER CLASS INFO
         for c in map(int, str(creation_number)):
+            if c > first_highest and c != first_highest:
+                first_highest = c
+            if c > second_highest and c != second_highest and c != first_highest:
+                second_highest = c
+            if c > third_highest and c != third_highest \
+                    and c != first_highest and c != second_highest:
+                third_highest = c
             if x == 0:
-                self.card_data["Vitality"] = c
-            if x == 1:
-                self.card_data["Finesse"] = c
-            if x == 2:
-                self.card_data["Divination"] = c
-            if x == 3:
                 self.card_data["Class Title"] = CLASS_DICT[class_group][c]
                 self.card_data["Class Digit"] = c
+                self.card_data["Class Color"] = COLOR_DICT[class_group][c]
             x += 1
-        self.chosen_VFD = "Vitality"
+
+        if class_group == "Melee":
+            self.chosen_VFD = "Vitality"
+            self.card_data["Vitality"] = first_highest
+            self.card_data["Finesse"] = second_highest
+            self.card_data["Divination"] = third_highest
+        if class_group == "Ranged":
+            self.chosen_VFD = "Finesse"
+            self.card_data["Vitality"] = third_highest
+            self.card_data["Finesse"] = first_highest
+            self.card_data["Divination"] = second_highest
+        if class_group == "Magic":
+            self.chosen_VFD = "Divination"
+            self.card_data["Vitality"] = second_highest
+            self.card_data["Finesse"] = third_highest
+            self.card_data["Divination"] = first_highest
 
         self.front_image = self.generateImg()
         self.back_image = pg.Surface((128, 128))
@@ -170,7 +190,7 @@ class Card(Button):
         epsilon_img = pg.image.load(os.path.join('Cards/Characters/Triblocks', f"epsilon{a}.png")).convert_alpha()
         epsilon_color = pg.Surface((128, 128))
         epsilon_text = pg.font.Font(None, 22).render(self.card_data["Name"], True,
-                                                     COLOR_DICT[random.choice(CLASS_GROUPS)][self.card_data["Class Digit"]])
+                                                     self.card_data["Class Color"])
         if self.card_data["Card Type"].startswith("Enemy"):
             epsilon_text = pg.transform.flip(epsilon_text, False, True)
         epsilon_color.fill(pg.Color(r, g, b))

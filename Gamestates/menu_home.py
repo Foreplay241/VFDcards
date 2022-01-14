@@ -14,18 +14,6 @@ def add_character_to_party(character_card_data: dict, party: list):
     party.append(character_card_data)
 
 
-def generate_card_preview(card_data: dict) -> pg.Surface:
-    info_img = pg.Surface((128, 128))
-    info_img.fill(BLACK)
-    name_img = pg.font.Font(None, 24).render(card_data["Name"], True, GREEN)
-    number_img = pg.font.Font(None, 24).render(str(card_data["Creation Number"]), True, GREEN)
-    class_img = pg.font.Font(None, 24).render(str(card_data["Class Title"]), True, GREEN)
-    info_img.blit(name_img, (0, 0))
-    info_img.blit(number_img, (0, 26))
-    info_img.blit(class_img, (0, 52))
-    return info_img
-
-
 def generate_new_card_data(name="Elira Jinmop", creation_time=420069,
                            class_group="Melee", card_type="ACE?") -> dict:
     new_card_data = {"Name": name, "Creation Number": creation_time,
@@ -33,14 +21,9 @@ def generate_new_card_data(name="Elira Jinmop", creation_time=420069,
     x = 0
     for c in map(int, str(creation_time)):
         if x == 0:
-            new_card_data["Vitality"] = c
-        if x == 1:
-            new_card_data["Finesse"] = c
-        if x == 2:
-            new_card_data["Divination"] = c
-        if x == 3:
             new_card_data["Class Title"] = CLASS_DICT[class_group][c]
             new_card_data["Class Digit"] = c
+            new_card_data["Class Color"] = COLOR_DICT[class_group][c]
         x += 1
     return new_card_data
 
@@ -163,11 +146,11 @@ class HomeMenu(Menu):
                     self.enemy_character_list.append(new_enemy_data)
                     self.character_name_list.append(self.new_card_data["Name"])
                 self.first_character_card.update_image(pg.Surface((128, 128)),
-                                                       generate_card_preview(self.player_character_list[0]))
+                                                       self.generate_card_preview(self.player_character_list[0]))
                 self.second_character_card.update_image(pg.Surface((128, 128)),
-                                                        generate_card_preview(self.player_character_list[1]))
+                                                        self.generate_card_preview(self.player_character_list[1]))
                 self.third_character_card.update_image(pg.Surface((128, 128)),
-                                                       generate_card_preview(self.player_character_list[2]))
+                                                       self.generate_card_preview(self.player_character_list[2]))
 
             if self.enter_battle_button.rect.collidepoint(self.mouse_pos):
                 if len(self.player_character_list) == self.max_party_size:
@@ -198,6 +181,17 @@ class HomeMenu(Menu):
                         tb.text += event.unicode
                         tb.update_button_text(tb.text)
                         self.add_character_to_party_button.update_button_text(f"Add {tb.text}")
+
+    def generate_card_preview(self, card_data: dict) -> pg.Surface:
+        info_img = pg.Surface((128, 128))
+        info_img.fill(BLACK)
+        name_img = self.font.render(card_data["Name"], True, card_data["Class Color"])
+        number_img = self.font.render(str(card_data["Creation Number"]), True, card_data["Class Color"])
+        class_img = self.font.render(str(card_data["Class Title"]), True, card_data["Class Color"])
+        info_img.blit(name_img, (0, 0))
+        info_img.blit(number_img, (0, 26))
+        info_img.blit(class_img, (0, 52))
+        return info_img
 
     def update(self, dt):
         super(HomeMenu, self).update(dt)
