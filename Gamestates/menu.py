@@ -6,13 +6,14 @@ def generate_new_card_data(name="Elira Jinmop", creation_time=420069,
                            class_group="Melee", card_type="ACE?") -> dict:
     new_card_data = {"Name": name, "Creation Number": creation_time,
                      "Class Group": class_group, "Card Type": card_type}
-    x = 0
-    for c in map(int, str(creation_time)):
-        if x == 0:
-            new_card_data["Class Title"] = CLASS_DICT[class_group][c]
-            new_card_data["Class Digit"] = c
-            new_card_data["Class Color"] = COLOR_DICT[class_group][c]
-        x += 1
+    creation_num_list = []
+    for i in map(int, str(creation_time)):
+        creation_num_list.append(i)
+    creation_num_list.sort()
+    new_card_data["Number List"] = creation_num_list
+    new_card_data["Class Digit"] = creation_num_list[0]
+    new_card_data["Class Title"] = CLASS_DICT[class_group][creation_num_list[0]]
+    new_card_data["Class Color"] = COLOR_DICT[class_group][creation_num_list[0]]
     return new_card_data
 
 

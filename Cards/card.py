@@ -6,59 +6,24 @@ from settings import *
 
 
 class Card(Button):
-    def __init__(self, name: str, creation_number: int, class_group: str, card_type: str,
-                 col=0, max_col=0, row=0, max_row=0):
-        super(Card, self).__init__(name, (0, 0), (128, 128), (128, 128),
+    def __init__(self, card_data_dict: dict, col=0, max_col=0, row=0, max_row=0):
+        super(Card, self).__init__(card_data_dict["Name"], (0, 0), (128, 128), (128, 128),
                                    col=col, max_col=max_col, row=row, max_row=max_row)
-        self.card_data = {
-            "Name": name,
-            "Creation Number": creation_number,
-            "Class Group": class_group,
-            "Card Type": card_type
-        }
-        x = 0
-        first_highest = 0
-        second_highest = 0
-        third_highest = 0
-        # PROCESSES THE CREATION NUMBER FOR THE VFD-SCORE AND CHARACTER CLASS INFO
-        for c in map(int, str(creation_number)):
-            if c > first_highest and c != first_highest:
-                first_highest = c
-            if c > second_highest and c != second_highest and c != first_highest:
-                second_highest = c
-            if c > third_highest and c != third_highest \
-                    and c != first_highest and c != second_highest:
-                third_highest = c
-            if x == 0:
-                self.card_data["Class Title"] = CLASS_DICT[class_group][c]
-                self.card_data["Class Digit"] = c
-                self.card_data["Class Color"] = COLOR_DICT[class_group][c]
-            x += 1
-
-        if class_group == "Melee":
-            self.chosen_VFD = "Vitality"
-            self.card_data["Vitality"] = first_highest
-            self.card_data["Finesse"] = second_highest
-            self.card_data["Divination"] = third_highest
-        if class_group == "Ranged":
-            self.chosen_VFD = "Finesse"
-            self.card_data["Vitality"] = third_highest
-            self.card_data["Finesse"] = first_highest
-            self.card_data["Divination"] = second_highest
-        if class_group == "Magic":
-            self.chosen_VFD = "Divination"
-            self.card_data["Vitality"] = second_highest
-            self.card_data["Finesse"] = third_highest
-            self.card_data["Divination"] = first_highest
+        self.chosen_VFD = "Vitality"
+        self.card_data = card_data_dict
+        self.card_data["Vitality"] = 0
+        self.card_data["Finesse"] = 0
+        self.card_data["Divination"] = 0
 
         self.front_image = self.generateImg()
         self.back_image = pg.Surface((128, 128))
-        self.back_image.fill(RANDOM_BLUE)
+        self.back_image.fill(self.card_data["Class Color"])
         self.image = self.back_image
         self.rect = self.image.get_rect()
 
         self.isFaceUp = False
         self.selected = False
+        self.selectable = True
 
     def rotate_center(self, surf, image, pos, originPos, angle):
         img_rect = image.get_rect(topleft=(pos[0] - originPos[0], pos[1] - originPos[1]))
@@ -216,24 +181,6 @@ class Card(Button):
         self.addEpsilonPart(newImg)
         return newImg
 
-    # def generateImg(self) -> pg.Surface:
-    #     newImg = pg.Surface((128, 128))
-    #     self.addAlphaPart(newImg)
-    #     if self.chosen_VFD == "Vitality":
-    #         self.addBetaPart(newImg, self.card_data["Vitality"], COLOR_DICT["Melee"][self.card_data["Class Digit"]])
-    #         self.addGammaPart(newImg, self.card_data["Finesse"], COLOR_DICT["Ranged"][self.card_data["Class Digit"]])
-    #         self.addDeltaPart(newImg, self.card_data["Divination"], COLOR_DICT["Magic"][self.card_data["Class Digit"]])
-    #     elif self.chosen_VFD == "Finesse":
-    #         self.addBetaPart(newImg, self.card_data["Finesse"], COLOR_DICT["Ranged"][self.card_data["Class Digit"]])
-    #         self.addGammaPart(newImg, self.card_data["Divination"], COLOR_DICT["Magic"][self.card_data["Class Digit"]])
-    #         self.addDeltaPart(newImg, self.card_data["Vitality"], COLOR_DICT["Melee"][self.card_data["Class Digit"]])
-    #     elif self.chosen_VFD == "Divination":
-    #         self.addBetaPart(newImg, self.card_data["Divination"], COLOR_DICT["Magic"][self.card_data["Class Digit"]])
-    #         self.addGammaPart(newImg, self.card_data["Vitality"], COLOR_DICT["Melee"][self.card_data["Class Digit"]])
-    #         self.addDeltaPart(newImg, self.card_data["Finesse"], COLOR_DICT["Ranged"][self.card_data["Class Digit"]])
-    #     self.addEpsilonPart(newImg)
-    #     return newImg
-
     def flip_card(self):
         self.isFaceUp = not self.isFaceUp
         if self.isFaceUp:
@@ -243,6 +190,12 @@ class Card(Button):
 
     def update(self):
         super(Card, self).update()
+
+    def disable(self):
+        self.selectable = False
+        self.selected = False
+        self.image.fill(BLACK)
+        self.image.set_colorkey(BLACK)
 
     def draw(self, window):
         super(Card, self).draw(window)

@@ -286,45 +286,11 @@ CLASS_DICT = {
 CARD_TYPES = ["Action", "Character", "Equipment"]
 
 random_color_list = [RANDOM_COLOR, RANDOM_COLOR2, RANDOM_COLOR3,
-                    RANDOM_RED, RANDOM_GREEN, RANDOM_BLUE,
-                    QUARTZ, BISQUE, MANDARIN_ORANGE, CADET_BLUE]
+                     RANDOM_RED, RANDOM_GREEN, RANDOM_BLUE,
+                     QUARTZ, BISQUE, MANDARIN_ORANGE, CADET_BLUE]
 
 fontname = pg.font.match_font('ariel')
 
 
 def clamp(n, minn, maxn):
     return max(min(maxn, n), minn)
-
-
-def player_draw_text(surf, text: str, color: tuple, size: int, pos: tuple):
-    """
-    Draws text with the top-right of the string at the position
-    :param surf:
-    :param text: String
-    :param color: Tuple
-    :param size: Int
-    :param pos: Tuple
-    :return: None
-    """
-    font = pg.font.Font(fontname, size)
-    text_surface = font.render(text, True, color)
-    text_rect = text_surface.get_rect()
-    text_rect.topright = pos
-    surf.blit(text_surface, text_rect)
-
-
-def enemy_draw_text(surf, text: str, color: tuple, size: int, pos: tuple):
-    """
-    Draws text with the top-left of the string at the position
-    :param surf:
-    :param text: String
-    :param color: Tuple
-    :param size: Int
-    :param pos: Tuple
-    :return: None
-    """
-    font = pg.font.Font(fontname, size)
-    text_surface = font.render(text, True, color)
-    text_rect = text_surface.get_rect()
-    text_rect.topleft = pos
-    surf.blit(text_surface, text_rect)

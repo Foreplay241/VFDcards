@@ -23,7 +23,7 @@ class GameState(object):
         persistent: a dict passed from state to state
         """
         self.persist = persistent
-        print(self.persist.keys())
+        # print(self.persist.keys())
 
     def get_event(self, event: pg.event):
         """
