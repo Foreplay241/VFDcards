@@ -23,7 +23,7 @@ class Game(GameState):
 
         if "Player's new Party" in persistent:
             for p in persistent["Player's new Party"]:
-                new_character = Character(p, col=x + 1, max_col=4, row=10, max_row=15)
+                new_character = Character(p, col=x + 1, max_col=4, row=9, max_row=15)
                 new_character.flip_card()
                 new_character.switch_to(new_character.chosen_VFD)
                 self.players_party.append(new_character)
@@ -31,7 +31,7 @@ class Game(GameState):
                 x += 1
         if "Enemy's new Party" in persistent:
             for e in persistent["Enemy's new Party"]:
-                new_character = Character(e, col=b + 1, max_col=4, row=1, max_row=15)
+                new_character = Character(e, col=b + 1, max_col=4, row=2, max_row=15)
                 new_character.chosen_VFD = random.choice(["Vitality", "Finesse", "Divination"])
                 new_character.front_image = new_character.generateImg()
                 new_character.front_image = pg.transform.flip(new_character.front_image, False, True)
@@ -62,6 +62,14 @@ class Game(GameState):
             #     }
             #     self.next_state_name = "PAUSE_MENU"
             #     self.done = True
+            if event.key == pg.K_o:
+                if self.num_of_battles == 3:
+                    self.persist = {
+                        "Player's Party": self.players_party,
+                        "Enemy's Party": self.enemys_party
+                    }
+                    self.next_state_name = "OUTCOME_MENU"
+                    self.done = True
             if event.key == pg.K_SPACE:
                 self.character_battle(self.char_pos)
             if event.key == pg.K_KP_1:
@@ -89,28 +97,24 @@ class Game(GameState):
         if not player.hasBattled and not enemy.hasBattled:
             difference = player.card_data[player.chosen_VFD] - enemy.card_data[enemy.chosen_VFD]
             print(difference)
-            player.row -= 2
-            enemy.row += 2
             enemy.isFaceUp = False
             enemy.flip_card()
             if difference > 0:
                 # PLAYER WINS
-                player.isWinner = True
-                enemy.isWinner = False
-                enemy.disable()
-                self.battle_winners.append(player)
-                self.battle_losers.append(enemy)
+                player.win(difference)
+                enemy.lose()
+                # self.battle_winners.append(player)
+                # self.battle_losers.append(enemy)
             elif difference == 0:
                 # TIE
                 player.isWinner = False
                 enemy.isWinner = False
             elif difference < 0:
                 # ENEMY WINS
-                enemy.isWinner = True
-                player.isWinner = False
-                player.disable()
-                self.battle_winners.append(enemy)
-                self.battle_losers.append(player)
+                enemy.win(difference)
+                player.lose()
+                # self.battle_winners.append(enemy)
+                # self.battle_losers.append(player)
             player.hasBattled = True
             enemy.hasBattled = True
             self.num_of_battles += 1
@@ -124,13 +128,14 @@ class Game(GameState):
             self.players_party[char_position].selected = True
 
     def update(self, dt):
-        if self.num_of_battles == 3:
-            self.persist = {
-                "Player's Party": self.players_party,
-                "Enemy's Party": self.enemys_party,
-            }
-            self.next_state_name = "OUTCOME_MENU"
-            self.done = True
+        # if self.num_of_battles == 3:
+        #
+        #     self.persist = {
+        #         "Player's Party": self.players_party,
+        #         "Enemy's Party": self.enemys_party,
+        #     }
+        #     self.next_state_name = "OUTCOME_MENU"
+        #     self.done = True
 
         super(Game, self).update(dt)
 

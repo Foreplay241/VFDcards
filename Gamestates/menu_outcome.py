@@ -32,6 +32,8 @@ class OutcomeMenu(Menu):
             self.players_party = persistent["Player's Party"]
         if "Enemy's Party" in persistent:
             self.enemys_party = persistent["Enemy's Party"]
+        for ec in self.enemys_party:
+            ec.disable()
         for pc in self.players_party:
             pc.hasBattled = False
             if pc.isWinner:
@@ -65,6 +67,12 @@ class OutcomeMenu(Menu):
                     }
                     self.next_state_name = "GAME"
                     self.done = True
+            if self.home_menu_button.rect.collidepoint(self.mouse_pos):
+                self.persist = {
+
+                }
+                self.next_state_name = "HOME_MENU"
+                self.done = True
 
         super(OutcomeMenu, self).get_event(event)
 

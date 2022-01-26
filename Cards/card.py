@@ -7,8 +7,17 @@ from settings import *
 
 class Card(Button):
     def __init__(self, card_data_dict: dict, col=0, max_col=0, row=0, max_row=0):
+        """
+        Represents an Action, Character, or Equipment.
+        :param card_data_dict: Dictionary of card data, containing name, VFD-score, class title and whatnot
+        :param col: column of the button grid
+        :param max_col: max column for the button grid
+        :param row: row for the button grid
+        :param max_row: max row of the button grid
+        """
         super(Card, self).__init__(card_data_dict["Name"], (0, 0), (128, 128), (128, 128),
                                    col=col, max_col=max_col, row=row, max_row=max_row)
+
         self.chosen_VFD = "Vitality"
         self.card_data = card_data_dict
         self.card_data["Vitality"] = 0
