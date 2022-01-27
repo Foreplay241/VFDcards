@@ -128,15 +128,6 @@ class Game(GameState):
             self.players_party[char_position].selected = True
 
     def update(self, dt):
-        # if self.num_of_battles == 3:
-        #
-        #     self.persist = {
-        #         "Player's Party": self.players_party,
-        #         "Enemy's Party": self.enemys_party,
-        #     }
-        #     self.next_state_name = "OUTCOME_MENU"
-        #     self.done = True
-
         super(Game, self).update(dt)
 
     def draw(self, surface: pg.Surface):
