@@ -31,7 +31,7 @@ def generate_new_card_data(name="Elira Jinmop", creation_time=420069,
 
 def generate_tutorial_team(team_size=3) -> []:
     character_list = [
-        generate_new_card_data(name="KilGoar", creation_time=234567, card_type="Character", class_group="Melee"),
+        generate_new_card_data(name="GorKil", creation_time=234567, card_type="Character", class_group="Melee"),
         generate_new_card_data(name="RaGuh", creation_time=543210, card_type="Character", class_group="Ranged"),
         generate_new_card_data(name="MerRoni", creation_time=987654, card_type="Character", class_group="Magic")
     ]

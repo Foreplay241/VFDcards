@@ -23,12 +23,12 @@ class Character(Card):
             self.card_data["Vitality"] = self.card_data["Number List"][5]
             self.card_data["Finesse"] = self.card_data["Number List"][4]
             self.card_data["Divination"] = self.card_data["Number List"][3]
-        if self.card_data["Class Group"] == "Ranged":
+        elif self.card_data["Class Group"] == "Ranged":
             self.chosen_VFD = "Finesse"
             self.card_data["Vitality"] = self.card_data["Number List"][3]
             self.card_data["Finesse"] = self.card_data["Number List"][5]
             self.card_data["Divination"] = self.card_data["Number List"][4]
-        if self.card_data["Class Group"] == "Magic":
+        elif self.card_data["Class Group"] == "Magic":
             self.chosen_VFD = "Divination"
             self.card_data["Vitality"] = self.card_data["Number List"][4]
             self.card_data["Finesse"] = self.card_data["Number List"][3]
@@ -36,12 +36,16 @@ class Character(Card):
         self.card_data["Total Points"] = 0
         self.hasBattled = False
         self.isWinner = False
+        self.power = 0
 
     def update(self):
         super(Character, self).update()
 
     def display_total_score(self):
         self.image.blit(self.total_score_text.img, (64, 64))
+
+    def adjust_VFD(self, VFD: str, new_value: int):
+        self.card_data[VFD] = new_value
 
     def win(self, gain_points: int):
         self.hasBattled = True
@@ -55,8 +59,13 @@ class Character(Card):
     def lose(self):
         self.hasBattled = True
         self.isWinner = False
-        self.flip_card()
+        # self.flip_card()
 
-    def switch_to(self, new_VFD: str):
+    def switch_skill_to(self, new_VFD: str):
         self.chosen_VFD = new_VFD
         self.update_image(self.generateImg(), pg.Surface((0, 0)))
+
+    def flip_card(self):
+        super(Character, self).flip_card()
+        # if self.isFaceUp:
+        #     self.chosen_VFD = self.PRIMARY_VFD

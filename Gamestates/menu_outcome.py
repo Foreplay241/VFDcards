@@ -73,6 +73,8 @@ class OutcomeMenu(Menu):
                 }
                 self.next_state_name = "HOME_MENU"
                 self.done = True
+            if self.exit_button.rect.collidepoint(self.mouse_pos):
+                self.quit = True
 
         super(OutcomeMenu, self).get_event(event)
 

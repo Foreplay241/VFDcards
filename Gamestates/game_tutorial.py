@@ -37,7 +37,7 @@ class TutorialGame(Game):
             Tut.FIVE: ["Red shows how much vitality a character has.", 14],
             Tut.SIX: ["Green represents their finesse level.", 14],
             Tut.SEVEN: ["Blue stones show how much divination for that character.", 14],
-            Tut.EIGHT: ["Once a character is selected, press the \'v\', \'f\', or \'d\' key.", 14],
+            Tut.EIGHT: ["Once a character is selected, press the \'v\', \'f\', or \'d\' key to select skill.", 14],
             Tut.NINE: ["When the character and skill are chosen, press space.", 14],
             Tut.TEN: ["This will compare your skill level against the opponents choice.", 14],
             Tut.ELEVEN: ["The winner remains face up and the loser is flipped down.", 14],

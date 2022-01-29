@@ -25,14 +25,13 @@ class Game(GameState):
             for p in persistent["Player's new Party"]:
                 new_character = Character(p, col=x + 1, max_col=4, row=9, max_row=15)
                 new_character.flip_card()
-                new_character.switch_to(new_character.chosen_VFD)
+                new_character.switch_skill_to(new_character.chosen_VFD)
                 self.players_party.append(new_character)
                 self.all_buttons.append(new_character)
                 x += 1
         if "Enemy's new Party" in persistent:
             for e in persistent["Enemy's new Party"]:
                 new_character = Character(e, col=b + 1, max_col=4, row=2, max_row=15)
-                new_character.chosen_VFD = random.choice(["Vitality", "Finesse", "Divination"])
                 new_character.front_image = new_character.generateImg()
                 new_character.front_image = pg.transform.flip(new_character.front_image, False, True)
                 self.enemys_party.append(new_character)
@@ -71,7 +70,7 @@ class Game(GameState):
                     self.next_state_name = "OUTCOME_MENU"
                     self.done = True
             if event.key == pg.K_SPACE:
-                self.character_battle(self.char_pos)
+                self.character_combat(self.char_pos)
             if event.key == pg.K_KP_1:
                 self.select_character(0)
             if event.key == pg.K_KP_2:
@@ -81,22 +80,47 @@ class Game(GameState):
             if event.key == pg.K_v:
                 for pc in self.players_party:
                     if pc.selected:
-                        pc.switch_to("Vitality")
+                        pc.switch_skill_to("Vitality")
             if event.key == pg.K_f:
                 for pc in self.players_party:
                     if pc.selected:
-                        pc.switch_to("Finesse")
+                        pc.switch_skill_to("Finesse")
             if event.key == pg.K_d:
                 for pc in self.players_party:
                     if pc.selected:
-                        pc.switch_to("Divination")
+                        pc.switch_skill_to("Divination")
 
-    def character_battle(self, character_position: int):
+    def battle(self, player_char: Character, enemy_char: Character):
+        pass
+
+    def character_combat(self, character_position: int):
         player: Character = self.players_party[character_position]
         enemy: Character = self.enemys_party[character_position]
+
+        if player.chosen_VFD == "Vitality":
+            if enemy.chosen_VFD == "Vitality":
+                pass
+            elif enemy.chosen_VFD == "Finesse":
+                enemy.card_data[enemy.chosen_VFD] -= 1
+            elif enemy.chosen_VFD == "Divination":
+                player.card_data[player.chosen_VFD] -= 1
+        elif player.chosen_VFD == "Finesse":
+            if enemy.chosen_VFD == "Vitality":
+                pass
+            elif enemy.chosen_VFD == "Finesse":
+                enemy.card_data[enemy.chosen_VFD] -= 1
+            elif enemy.chosen_VFD == "Divination":
+                player.card_data[player.chosen_VFD] -= 1
+        elif player.chosen_VFD == "Divination":
+            if enemy.chosen_VFD == "Vitality":
+                pass
+            elif enemy.chosen_VFD == "Finesse":
+                enemy.card_data[enemy.chosen_VFD] -= 1
+            elif enemy.chosen_VFD == "Divination":
+                player.card_data[player.chosen_VFD] -= 1
+
         if not player.hasBattled and not enemy.hasBattled:
             difference = player.card_data[player.chosen_VFD] - enemy.card_data[enemy.chosen_VFD]
-            print(difference)
             enemy.isFaceUp = False
             enemy.flip_card()
             if difference > 0:
