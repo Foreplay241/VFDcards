@@ -1,6 +1,20 @@
 import random
-
+from enum import Enum
 import pygame as pg
+
+
+class Soldier(Enum):
+    TIER1 = {
+        "Warrior": [6, 2, 0],
+        "Brawler": [5, 3, 0],
+        "Spell-Sword": [5, 1, 2],
+    }
+    TIER2 = {
+        "Gladiator": [7, 4, 0],
+        "Rogue": [6, 3, 2],
+        "Templar": [5, 1, 2],
+    }
+
 
 TITLE = "spaceDits - Reddit space shooter"
 pg.font.init()
@@ -267,6 +281,7 @@ EXAMPLE_NAMES = [
 ]
 
 CLASS_GROUPS = ["Melee", "Ranged", "Magic"]
+
 COLOR_DICT = {
     "Melee": [RED, DARK_RED, LIGHT_RED, PALE_VIOLET_RED, VITALITY_RED, ORANGE_RED,
               FREE_SPEECH_RED, MEDIUM_VIOLET_RED, INDIAN_RED, RANDOM_RED],

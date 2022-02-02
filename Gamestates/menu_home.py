@@ -71,12 +71,12 @@ class HomeMenu(Menu):
                                               text=f"Enter game",
                                               textcolor=WHITE_SMOKE, bgColor=SPACE_GREY,
                                               optiontext="", optioncolor=LIGHT_SLATE_BLUE, fontsize=22,
-                                              col=1, max_col=2, row=7, max_row=12, maxWidth=420)
+                                              col=1, max_col=2, row=8, max_row=12, maxWidth=420)
         self.enter_tutorial_button = TextButton("H7", (0, 0), (0, 0), (0, 0),
                                                 text=f"Tutorial",
                                                 textcolor=MUSTARD_YELLOW, bgColor=SPACE_GREY,
                                                 optiontext="", optioncolor=LIGHT_SLATE_BLUE, fontsize=22,
-                                                col=1, max_col=2, row=8, max_row=12, maxWidth=420)
+                                                col=1, max_col=2, row=7, max_row=12, maxWidth=420)
         self.text_buttons.append(self.generate_random_team_button)
         self.all_buttons.append(self.enter_battle_button)
         self.all_buttons.append(self.enter_tutorial_button)
@@ -146,11 +146,11 @@ class HomeMenu(Menu):
         info_img = pg.Surface((128, 128))
         info_img.fill(BLACK)
         name_img = self.font.render(card_data["Name"], True, card_data["Class Color"])
-        number_img = self.font.render(str(card_data["Creation Number"]), True, card_data["Class Color"])
+        # number_img = self.font.render(str(card_data["Creation Number"]), True, card_data["Class Color"])
         class_img = self.font.render(str(card_data["Class Title"]), True, card_data["Class Color"])
         info_img.blit(name_img, (0, 0))
-        info_img.blit(number_img, (0, 26))
-        info_img.blit(class_img, (0, 52))
+        # info_img.blit(number_img, (0, 26))
+        info_img.blit(class_img, (0, 26))
         return info_img
 
     def update_character_previews(self):

@@ -61,14 +61,13 @@ class Game(GameState):
             #     }
             #     self.next_state_name = "PAUSE_MENU"
             #     self.done = True
-            if event.key == pg.K_o:
-                if self.num_of_battles == 3:
-                    self.persist = {
-                        "Player's Party": self.players_party,
-                        "Enemy's Party": self.enemys_party
-                    }
-                    self.next_state_name = "OUTCOME_MENU"
-                    self.done = True
+            if event.key == pg.K_o and self.num_of_battles == 3:
+                self.persist = {
+                    "Player's Party": self.players_party,
+                    "Enemy's Party": self.enemys_party
+                }
+                self.next_state_name = "OUTCOME_MENU"
+                self.done = True
             if event.key == pg.K_SPACE:
                 self.character_combat(self.char_pos)
             if event.key == pg.K_KP_1:

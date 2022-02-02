@@ -164,7 +164,7 @@ class Card(Button):
             x += 1
         epsilon_img = pg.image.load(os.path.join('Cards/Characters/Triblocks', f"epsilon{a}.png")).convert_alpha()
         epsilon_color = pg.Surface((128, 128))
-        epsilon_text = pg.font.Font(None, 22).render(self.card_data["Name"] + " " + self.chosen_VFD, True,
+        epsilon_text = pg.font.Font(None, 22).render(self.card_data["Name"], True,
                                                      self.card_data["Class Color"])
         if self.card_data["Card Type"].startswith("Enemy"):
             epsilon_text = pg.transform.flip(epsilon_text, False, True)

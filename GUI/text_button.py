@@ -23,7 +23,7 @@ class TextButton(Button):
         :param col: column position
         :param max_col: max columns on the screen
         :param row: row position
-        :param max_row: mac rows on the screen
+        :param max_row: max rows on the screen
         :param canEdit: if the text is editable
         :param maxWidth: width of the button
         """
