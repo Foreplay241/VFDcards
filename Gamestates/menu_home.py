@@ -10,10 +10,10 @@ from Gamestates.menu import Menu
 from settings import *
 
 
-def add_character_to_party(character_card_data: dict, party: list):
-    party.append(character_card_data)
+# def add_character_to_party(character_card_data: dict, party: list):
+#     party.append(character_card_data)
 
-
+# CREATE DICTIONARY FOR CARD DATA
 def generate_new_card_data(name="Elira Jinmop", creation_time=420069,
                            class_group="Melee", card_type="ACE?") -> dict:
     new_card_data = {"Name": name, "Creation Number": creation_time,
@@ -24,8 +24,8 @@ def generate_new_card_data(name="Elira Jinmop", creation_time=420069,
     creation_num_list.sort()
     new_card_data["Number List"] = creation_num_list
     new_card_data["Class Digit"] = creation_num_list[0]
-    new_card_data["Class Title"] = CLASS_DICT[class_group][creation_num_list[0]]
-    new_card_data["Class Color"] = COLOR_DICT[class_group][creation_num_list[0]]
+    new_card_data["Class Title"] = CLASS_DICT[class_group][0]
+    new_card_data["Class Color"] = COLOR_DICT[class_group][0]
     return new_card_data
 
 
@@ -38,7 +38,7 @@ def generate_tutorial_team(team_size=3) -> []:
     return character_list
 
 
-def generate_random_team(team_size=3) -> []:
+def generate_random_team(team_size=3) -> list:
     character_list = []
     for i in range(team_size):
         new_character_data = generate_new_card_data(name=random.choice(EXAMPLE_NAMES),
@@ -95,7 +95,7 @@ class HomeMenu(Menu):
         self.update_character_previews()
         super(HomeMenu, self).startup(persistent)
 
-    def get_event(self, event):
+    def get_event(self, event: pg.event):
         super(HomeMenu, self).get_event(event)
         if event.type == pg.MOUSEBUTTONDOWN:
             for cb in self.card_buttons:
@@ -105,6 +105,7 @@ class HomeMenu(Menu):
                         card_type="Character",
                         class_group=random.choice(CLASS_GROUPS))
                     self.update_character_previews()
+                # print(self.player_character_list)
             for ab in self.all_buttons:
                 ab.active = False
                 if ab.rect.collidepoint(self.mouse_pos):
@@ -146,10 +147,8 @@ class HomeMenu(Menu):
         info_img = pg.Surface((128, 128))
         info_img.fill(BLACK)
         name_img = self.font.render(card_data["Name"], True, card_data["Class Color"])
-        # number_img = self.font.render(str(card_data["Creation Number"]), True, card_data["Class Color"])
         class_img = self.font.render(str(card_data["Class Title"]), True, card_data["Class Color"])
         info_img.blit(name_img, (0, 0))
-        # info_img.blit(number_img, (0, 26))
         info_img.blit(class_img, (0, 26))
         return info_img
 

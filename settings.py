@@ -1,22 +1,8 @@
 import random
-from enum import Enum
 import pygame as pg
 
 
-class Soldier(Enum):
-    TIER1 = {
-        "Warrior": [6, 2, 0],
-        "Brawler": [5, 3, 0],
-        "Spell-Sword": [5, 1, 2],
-    }
-    TIER2 = {
-        "Gladiator": [7, 4, 0],
-        "Rogue": [6, 3, 2],
-        "Templar": [5, 1, 2],
-    }
-
-
-TITLE = "spaceDits - Reddit space shooter"
+TITLE = "VFDcore"
 pg.font.init()
 
 # SCALING AND FPS
@@ -280,6 +266,7 @@ EXAMPLE_NAMES = [
     "Kappa", "Aggie", "LoKul", "Shondora", "HuKalta", "RoMinta"
 ]
 
+# CLASS_GROUPS = ["Soldier", "Ranger", "Seer"]
 CLASS_GROUPS = ["Melee", "Ranged", "Magic"]
 
 COLOR_DICT = {
@@ -291,11 +278,11 @@ COLOR_DICT = {
               DIVINATION_BLUE, POWDER_BLUE, NEW_MIDNIGHT_BLUE, LIGHT_STEEL_BLUE]
 }
 CLASS_DICT = {
-    "Melee": ["Warrior", "Berserker", "Soldier", "Knight", "Paladin",
+    "Melee": ["Soldier", "Berserker", "Warrior", "Knight", "Paladin",
               "Sell-sword", "Gladiator", "Samurai", "Brawler", "Dragoon"],
-    "Ranged": ["Archer", "Ranger", "Pirate", "Beast-Master", "Hunter",
+    "Ranged": ["Ranger", "Archer", "Pirate", "Beast-Master", "Hunter",
                "Ninja", "Monk", "Axe-thrower", "Druid", "Assassin"],
-    "Magic": ["Wizard", "Priest", "Cleric", "Mage", "Seer",
+    "Magic": ["Seer", "Priest", "Cleric", "Mage", "Wizard",
               "Warlock", "Witch", "Shaman", "Necromancer", "BattleMage"]
 }
 CARD_TYPES = ["Action", "Character", "Equipment"]

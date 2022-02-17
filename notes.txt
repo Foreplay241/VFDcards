@@ -1,0 +1,8 @@
+# LAPTOP OSRS POSITIONS
+spellbook = 1310, 450
+inventory = 1210, 450
+high alch = 1285, 580
+first inv slot = 1145, 495
+chest = 520, 365
+bottom chest = 525, 665
+top chest = 520, 140

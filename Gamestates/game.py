@@ -1,6 +1,39 @@
+from Cards.Characters.Ranger.ranger_card import Ranger
+from Cards.Characters.Seer.seer_card import Seer
+from Cards.Characters.Soldier.soldier_card import Soldier
 from Cards.character_card import Character
 from Gamestates.gamestate import GameState
 from settings import *
+
+
+def compare_VFD_scores(player: Character, enemy: Character) -> str:
+    if player.chosen_VFD == "Vitality":
+        if enemy.chosen_VFD == "Vitality":
+            return "Tie"
+        elif enemy.chosen_VFD == "Finesse":
+            player.card_data["Vitality"] += 1
+            return "Player"
+        elif enemy.chosen_VFD == "Divination":
+            enemy.card_data["Divination"] += 1
+            return "Enemy"
+    elif player.chosen_VFD == "Finesse":
+        if enemy.chosen_VFD == "Vitality":
+            enemy.card_data["Vitality"] += 1
+            return "Enemy"
+        elif enemy.chosen_VFD == "Finesse":
+            return "Tie"
+        elif enemy.chosen_VFD == "Divination":
+            player.card_data["Finesse"] += 1
+            return "Player"
+    elif player.chosen_VFD == "Divination":
+        if enemy.chosen_VFD == "Vitality":
+            player.card_data["Divination"] += 1
+            return "Player"
+        elif enemy.chosen_VFD == "Finesse":
+            enemy.card_data["Finesse"] += 1
+            return "Enemy"
+        elif enemy.chosen_VFD == "Divination":
+            return "Tie"
 
 
 class Game(GameState):
@@ -20,10 +53,16 @@ class Game(GameState):
         self.battle_winners = []
         self.enemys_party = []
         self.players_party = []
-
+        
         if "Player's new Party" in persistent:
-            for p in persistent["Player's new Party"]:
-                new_character = Character(p, col=x + 1, max_col=4, row=9, max_row=15)
+            for pc in persistent["Player's new Party"]:
+                new_character = None
+                if pc["Class Title"] == "Soldier":
+                    new_character = Soldier(pc, col=x + 1, max_col=4, row=9, max_row=15)
+                elif pc["Class Title"] == "Ranger":
+                    new_character = Ranger(pc, col=x + 1, max_col=4, row=9, max_row=15)
+                elif pc["Class Title"] == "Seer":
+                    new_character = Seer(pc, col=x + 1, max_col=4, row=9, max_row=15)
                 new_character.flip_card()
                 new_character.switch_skill_to(new_character.chosen_VFD)
                 self.players_party.append(new_character)
@@ -31,7 +70,14 @@ class Game(GameState):
                 x += 1
         if "Enemy's new Party" in persistent:
             for e in persistent["Enemy's new Party"]:
-                new_character = Character(e, col=b + 1, max_col=4, row=2, max_row=15)
+                new_character = None
+                if e["Class Title"] == "Soldier":
+                    new_character = Soldier(e, col=b + 1, max_col=4, row=2, max_row=15)
+                elif e["Class Title"] == "Ranger":
+                    new_character = Ranger(e, col=b + 1, max_col=4, row=2, max_row=15)
+                elif e["Class Title"] == "Seer":
+                    new_character = Seer(e, col=b + 1, max_col=4, row=2, max_row=15)
+                new_character.card_data["Card Type"] = "Enemy Character"
                 new_character.front_image = new_character.generateImg()
                 new_character.front_image = pg.transform.flip(new_character.front_image, False, True)
                 self.enemys_party.append(new_character)
@@ -95,49 +141,22 @@ class Game(GameState):
     def character_combat(self, character_position: int):
         player: Character = self.players_party[character_position]
         enemy: Character = self.enemys_party[character_position]
-
-        if player.chosen_VFD == "Vitality":
-            if enemy.chosen_VFD == "Vitality":
-                pass
-            elif enemy.chosen_VFD == "Finesse":
-                enemy.card_data[enemy.chosen_VFD] -= 1
-            elif enemy.chosen_VFD == "Divination":
-                player.card_data[player.chosen_VFD] -= 1
-        elif player.chosen_VFD == "Finesse":
-            if enemy.chosen_VFD == "Vitality":
-                pass
-            elif enemy.chosen_VFD == "Finesse":
-                enemy.card_data[enemy.chosen_VFD] -= 1
-            elif enemy.chosen_VFD == "Divination":
-                player.card_data[player.chosen_VFD] -= 1
-        elif player.chosen_VFD == "Divination":
-            if enemy.chosen_VFD == "Vitality":
-                pass
-            elif enemy.chosen_VFD == "Finesse":
-                enemy.card_data[enemy.chosen_VFD] -= 1
-            elif enemy.chosen_VFD == "Divination":
-                player.card_data[player.chosen_VFD] -= 1
-
         if not player.hasBattled and not enemy.hasBattled:
+            compare_VFD_scores(player, enemy)
             difference = player.card_data[player.chosen_VFD] - enemy.card_data[enemy.chosen_VFD]
+            print(player.card_data[player.chosen_VFD])
+            print(enemy.card_data[player.chosen_VFD])
             enemy.isFaceUp = False
             enemy.flip_card()
             if difference > 0:
-                # PLAYER WINS
-                player.win(difference)
+                player.win()
                 enemy.lose()
-                # self.battle_winners.append(player)
-                # self.battle_losers.append(enemy)
             elif difference == 0:
-                # TIE
-                player.isWinner = False
-                enemy.isWinner = False
+                player.tie()
+                enemy.tie()
             elif difference < 0:
-                # ENEMY WINS
-                enemy.win(difference)
+                enemy.win()
                 player.lose()
-                # self.battle_winners.append(enemy)
-                # self.battle_losers.append(player)
             player.hasBattled = True
             enemy.hasBattled = True
             self.num_of_battles += 1

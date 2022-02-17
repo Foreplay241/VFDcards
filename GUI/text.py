@@ -22,17 +22,17 @@ class Text:
         self.fontname = None
         self.font_size = size
         self.set_font()
-        self.render()
+        self.render("New text")
 
     def set_font(self):
         """Set the Font object from name and size."""
         self.font = pg.font.Font(self.fontname, self.font_size)
 
-    def render(self):
+    def render(self, new_text: str):
         """Render the text into an image."""
         self.img = pg.Surface((10, 6))
         self.img.fill(BLACK)
-        self.img = self.font.render(self.text, True, self.font_color)
+        self.img = self.font.render(new_text, True, self.font_color)
         self.rect = self.img.get_rect()
         self.rect.center = self.pos
 

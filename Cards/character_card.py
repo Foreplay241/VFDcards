@@ -16,50 +16,51 @@ class Character(Card):
         """
         super(Character, self).__init__(card_data_dict, col=col, max_col=max_col, row=row, max_row=max_row)
         self.total_score = 0
+        self.win_score = 0
+        self.loss_score = 0
+        self.tie_score = 0
+        self.win_score_text = Text(str(self.win_score), (64, 64), color=WHITE, size=16)
+        self.loss_score_text = Text(str(self.loss_score), (64, 64), color=WHITE, size=16)
+        self.tie_score_text = Text(str(self.tie_score), (64, 64), color=WHITE, size=16)
         self.total_score_text = Text(str(self.total_score), (64, 64), color=WHITE, size=16)
-        # print("+================+")
-        if self.card_data["Class Group"] == "Melee":
-            self.chosen_VFD = "Vitality"
-            self.card_data["Vitality"] = self.card_data["Number List"][5]
-            self.card_data["Finesse"] = self.card_data["Number List"][4]
-            self.card_data["Divination"] = self.card_data["Number List"][3]
-        elif self.card_data["Class Group"] == "Ranged":
-            self.chosen_VFD = "Finesse"
-            self.card_data["Vitality"] = self.card_data["Number List"][3]
-            self.card_data["Finesse"] = self.card_data["Number List"][5]
-            self.card_data["Divination"] = self.card_data["Number List"][4]
-        elif self.card_data["Class Group"] == "Magic":
-            self.chosen_VFD = "Divination"
-            self.card_data["Vitality"] = self.card_data["Number List"][4]
-            self.card_data["Finesse"] = self.card_data["Number List"][3]
-            self.card_data["Divination"] = self.card_data["Number List"][5]
-        self.card_data["Total Points"] = 0
+        self.card_data["Total Points"] = self.total_score
+        self.card_data["Total Wins"] = self.win_score
+        self.card_data["Total Loss"] = self.loss_score
+        self.card_data["Total Ties"] = self.tie_score
         self.hasBattled = False
         self.isWinner = False
-        self.power = 0
 
     def update(self):
         super(Character, self).update()
 
-    def display_total_score(self):
-        self.image.blit(self.total_score_text.img, (64, 64))
+    def display_score(self, WLT: str):
+        score_text = self.total_score_text
+        score_text.render(str([self.win_score, self.loss_score, self.tie_score]))
+        if self.card_data[""]
+        self.image.blit(score_text.img, (46, 64))
 
     def adjust_VFD(self, VFD: str, new_value: int):
         self.card_data[VFD] = new_value
 
-    def win(self, gain_points: int):
-        self.hasBattled = True
+    def win(self):
         self.isWinner = True
-        self.card_data["Total Points"] += gain_points
-        self.update_image(self.generateImg(), self.generateImg())
-        self.total_score_text.text = str(self.card_data["Total Points"])
-        self.total_score_text.render()
-        self.display_total_score()
+        self.win_score += 1
+        self.total_score += 1
+        self.hasBattled = True
+        self.display_score("win")
 
     def lose(self):
-        self.hasBattled = True
         self.isWinner = False
-        # self.flip_card()
+        self.loss_score += 1
+        self.total_score += 1
+        self.hasBattled = True
+        self.display_score("loss")
+        
+    def tie(self):
+        self.tie_score += 1
+        self.total_score += 1
+        self.hasBattled = True
+        self.display_score("tie")
 
     def switch_skill_to(self, new_VFD: str):
         self.chosen_VFD = new_VFD
@@ -67,5 +68,4 @@ class Character(Card):
 
     def flip_card(self):
         super(Character, self).flip_card()
-        # if self.isFaceUp:
-        #     self.chosen_VFD = self.PRIMARY_VFD
+        
