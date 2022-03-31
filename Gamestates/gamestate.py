@@ -8,12 +8,20 @@ class GameState(object):
     def __init__(self):
         self.done = False
         self.quit = False
+        self.current_state_name = None
         self.next_state_name = None
         self.persist = {}
         self.font = pg.font.Font(None, 24)
         self.mouse_pos = (0, 0)
         self.all_buttons = []
         self.text_buttons = []
+        
+    def add_all_buttons(self, list_of_button_lists: list):
+        print(f"Add all buttons_{self.next_state_name}")
+        for buttonList in list_of_button_lists:
+            for button in buttonList:
+                self.all_buttons.append(button)
+                print(button.id_num)
 
     def startup(self, persistent: dict):
         """

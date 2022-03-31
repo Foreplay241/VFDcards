@@ -2,7 +2,7 @@ from Gamestates.gamestate import GameState
 from settings import *
 
 
-def generate_new_card_data(name="Elira Jinmop", creation_time=420069,
+def generate_new_card_data(name="Elira", creation_time=420069,
                            class_group="Melee", card_type="ACE?") -> dict:
     new_card_data = {"Name": name, "Creation Number": creation_time,
                      "Class Group": class_group, "Card Type": card_type}
@@ -19,6 +19,7 @@ def generate_new_card_data(name="Elira Jinmop", creation_time=420069,
 
 class Menu(GameState):
     def __init__(self):
+        self.card_buttons = []
         super().__init__()
 
     def startup(self, persistent):

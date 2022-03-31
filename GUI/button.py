@@ -11,36 +11,46 @@ class Button(pg.sprite.Sprite):
         self.id_num = id_num
         self.pos = pos
         self.sourceFileDir = os.path.dirname(os.path.abspath(__file__))
-        self.GUIAssetsPath = os.path.join(self.sourceFileDir, "assets")
-        self.BGimage = pg.Surface((35, 35))
-        self.FGimage = pg.Surface((15, 15))
+        self.assetsPath = os.path.join(self.sourceFileDir, "assets")
+        self.BGimage = pg.Surface((0, 0))
+        self.FGimage = pg.Surface((0, 0))
+        # DETERMINE IF LOADABLE IMAGE OR NEW BLANK IMAGE.
         if type(BGimg) is tuple:
             self.BGimage = pg.Surface(BGimg)
-            self.BGimage.fill(DISABLED_TRIBLOCK)
+            self.BGimage.fill(WHITE)
         elif type(BGimg) is str:
-            self.BGimage = pg.image.load(os.path.join(self.GUIAssetsPath, BGimg + ".png")).convert_alpha()
+            self.BGimage = pg.image.load(os.path.join(self.assetsPath, BGimg + ".png")).convert_alpha()
 
         if type(FGimg) is tuple:
             self.FGimage = pg.Surface(FGimg)
         elif type(FGimg) is str:
-            self.FGimage = pg.image.load(os.path.join(self.GUIAssetsPath, FGimg + ".png")).convert_alpha()
-
+            self.FGimage = pg.image.load(os.path.join(self.assetsPath, FGimg + ".png")).convert_alpha()
+        
+        # SET UP LOCATION ON THE GRID
         self.column = col
         self.row = row
         self.max_column = max_col
         self.max_row = max_row
+        
+        # SET IMAGE AND RECTANGLE
         self.image = self.BGimage
         self.rect = self.image.get_rect()
         self.clicked = False
         self.active = False
+        self.selected = False
 
-    def update_image(self, newBGimg, newFGimg):
+    def update_image(self, newBGimg: pg.Surface, newFGimg: pg.Surface):
+        """
+        Set the background image and foreground image on top, then colorkey and rectangle.
+        :param newBGimg: Background image to be set for this button.
+        :param newFGimg: Foreground image to be set on top of background.
+        :return:
+        """
         self.BGimage = newBGimg
         self.FGimage = newFGimg
-        # self.image.fill(BLACK)
         self.image.blit(self.BGimage, (0, 0))
         self.image.blit(self.FGimage, (0, 0))
-        self.image.set_colorkey(BLACK)
+        # self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
 
     def events(self):

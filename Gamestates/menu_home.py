@@ -14,7 +14,7 @@ from settings import *
 #     party.append(character_card_data)
 
 # CREATE DICTIONARY FOR CARD DATA
-def generate_new_card_data(name="Elira Jinmop", creation_time=420069,
+def generate_new_card_data(name="Elira", creation_time=420069,
                            class_group="Melee", card_type="ACE?") -> dict:
     new_card_data = {"Name": name, "Creation Number": creation_time,
                      "Class Group": class_group, "Card Type": card_type}
@@ -52,42 +52,41 @@ def generate_random_team(team_size=3) -> list:
 class HomeMenu(Menu):
     def __init__(self):
         super(HomeMenu, self).__init__()
-
+        # INITIALIZE VARIABLES AND BUTTONS
         self.player_character_list = []
         self.enemy_character_list = []
         self.card_buttons = []
         self.max_party_size = 3
-        self.generate_random_team_button = TextButton("H8", (0, 0), (128, 128), (128, 128), text="Generate Random Team",
+        self.generate_random_team_button = TextButton("HOM0", (0, 0), (128, 128), (128, 128), text="Generate Random Team",
                                                       textcolor=CORN_FLOWER_BLUE, bgColor=SPACE_GREY,
                                                       optiontext="", optioncolor=LIGHT_SLATE_BLUE, fontsize=22,
                                                       col=1, max_col=2, row=2, max_row=12, maxWidth=210)
-        self.first_character_card = Button("H4", (0, 0), (128, 128), (128, 128),
+        self.first_character_card = Button("HOM1", (0, 0), (128, 128), (128, 128),
                                            col=1, max_col=4, row=4, max_row=12)
-        self.second_character_card = Button("H5", (0, 0), (128, 128), (128, 128),
+        self.second_character_card = Button("HOM2", (0, 0), (128, 128), (128, 128),
                                             col=2, max_col=4, row=4, max_row=12)
-        self.third_character_card = Button("H6", (0, 0), (128, 128), (128, 128),
+        self.third_character_card = Button("HOM3", (0, 0), (128, 128), (128, 128),
                                            col=3, max_col=4, row=4, max_row=12)
-        self.enter_battle_button = TextButton("H7", (0, 0), (0, 0), (0, 0),
+        self.enter_battle_button = TextButton("HOM4", (0, 0), (0, 0), (0, 0),
                                               text=f"Enter game",
                                               textcolor=WHITE_SMOKE, bgColor=SPACE_GREY,
                                               optiontext="", optioncolor=LIGHT_SLATE_BLUE, fontsize=22,
                                               col=1, max_col=2, row=8, max_row=12, maxWidth=420)
-        self.enter_tutorial_button = TextButton("H7", (0, 0), (0, 0), (0, 0),
+        self.enter_tutorial_button = TextButton("HOM5", (0, 0), (0, 0), (0, 0),
                                                 text=f"Tutorial",
                                                 textcolor=MUSTARD_YELLOW, bgColor=SPACE_GREY,
                                                 optiontext="", optioncolor=LIGHT_SLATE_BLUE, fontsize=22,
                                                 col=1, max_col=2, row=7, max_row=12, maxWidth=420)
+        # ADD TEXT BUTTONS TO LIST
         self.text_buttons.append(self.generate_random_team_button)
-        self.all_buttons.append(self.enter_battle_button)
-        self.all_buttons.append(self.enter_tutorial_button)
-        self.all_buttons.append(self.generate_random_team_button)
-
+        self.text_buttons.append(self.enter_battle_button)
+        self.text_buttons.append(self.enter_tutorial_button)
+        # ADD CARD PREVIEWS TO LIST
         self.card_buttons.append(self.first_character_card)
         self.card_buttons.append(self.second_character_card)
         self.card_buttons.append(self.third_character_card)
-        self.all_buttons.append(self.first_character_card)
-        self.all_buttons.append(self.second_character_card)
-        self.all_buttons.append(self.third_character_card)
+        # ADD LISTS TO ALL BUTTONS PROPERLY
+        self.add_all_buttons([self.text_buttons, self.card_buttons])
 
     def startup(self, persistent):
         self.player_character_list = generate_random_team(self.max_party_size)

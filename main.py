@@ -23,7 +23,7 @@ class App(object):
         self.game = Game()
         self.current_state.startup({})
         self.running = True
-
+    
     def event_loop(self):
         """
         Events are passed for handling to the current state.
@@ -31,7 +31,7 @@ class App(object):
         """
         for event in pg.event.get():
             self.current_state.get_event(event)
-
+    
     def flip_state(self, current_state, new_state):
         """
         Switch game state to a different game state.
@@ -42,8 +42,9 @@ class App(object):
         persistent = self.current_state.persist
         self.current_state = new_state
         self.current_state.startup(persistent)
+        self.screen.fill(BLACK)
         return self.current_state
-
+    
     def update(self, dt):
         """
         Check for state flip and update active state
@@ -53,14 +54,14 @@ class App(object):
         if self.current_state.done:
             self.flip_state(self.current_state, self.states[self.current_state.next_state_name])
         self.current_state.update(dt)
-
+    
     def draw(self):
         """
         Pass display surface to active state for drawing.
         :return:
         """
         self.current_state.draw(self.screen)
-
+    
     def run(self):
         """
         Pretty much the entirety of the game's runtime will be
@@ -82,6 +83,6 @@ if __name__ == '__main__':
         "OUTCOME_MENU": OutcomeMenu(),
         "GAME": Game(),
         "TUTORIAL": TutorialGame()
-        }
+    }
     app = App(SCREEN, GAME_STATES)
     app.run()

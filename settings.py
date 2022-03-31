@@ -77,6 +77,7 @@ LIGHT_GREY = (211, 211, 211)
 SLATE_GREY = (112, 128, 144)
 VERY_LIGHT_GREY = (205, 205, 205)
 WHITE = (255, 255, 255)
+BASE_GREY = (156, 156, 156)
 
 # BLUES
 ALICE_BLUE = (240, 248, 255)
@@ -262,8 +263,8 @@ RANDOM_GREEN = (random.randint(0, 125), random.randint(185, 255), random.randint
 RANDOM_BLUE = (random.randint(0, 125), random.randint(0, 125), random.randint(185, 255))
 
 EXAMPLE_NAMES = [
-    "Numo", "Windel", "Moris-ko", "UnDah", "Bilowen", "Ashia", "Manekot", "LoGey", "Mellon",
-    "Kappa", "Aggie", "LoKul", "Shondora", "HuKalta", "RoMinta"
+    "Numo", "Windel", "Mori", "UnDah", "Biwen", "Ashia", "Makot", "LoGey", "Melno",
+    "Kappa", "Aggie", "LoKul", "ShoDa", "Hulta", "Rota"
 ]
 
 # CLASS_GROUPS = ["Soldier", "Ranger", "Seer"]

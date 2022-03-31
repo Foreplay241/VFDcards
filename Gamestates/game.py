@@ -6,34 +6,39 @@ from Gamestates.gamestate import GameState
 from settings import *
 
 
-def compare_VFD_scores(player: Character, enemy: Character) -> str:
+def compare_chosen_VFD(player: Character, enemy: Character) -> str:
+    player_VFD_score = player.RANK_DICT[player.rankStr][player.PRIMARY_VFD][1]
+    enemy_VFD_score = enemy.RANK_DICT[enemy.rankStr][enemy.PRIMARY_VFD][1]
     if player.chosen_VFD == "Vitality":
         if enemy.chosen_VFD == "Vitality":
-            return "Tie"
+            dif = player_VFD_score[0] - enemy_VFD_score[0]
+            return dif
         elif enemy.chosen_VFD == "Finesse":
-            player.card_data["Vitality"] += 1
-            return "Player"
+            dif = (player_VFD_score[0] + 1) - (enemy_VFD_score[1] - 1)
+            return dif
         elif enemy.chosen_VFD == "Divination":
-            enemy.card_data["Divination"] += 1
-            return "Enemy"
+            dif = (player_VFD_score[0] - 1) - (enemy_VFD_score[2] + 1)
+            return dif
     elif player.chosen_VFD == "Finesse":
         if enemy.chosen_VFD == "Vitality":
-            enemy.card_data["Vitality"] += 1
-            return "Enemy"
+            dif = (player_VFD_score[1] - 1) - (enemy_VFD_score[0] + 1)
+            return dif
         elif enemy.chosen_VFD == "Finesse":
-            return "Tie"
+            dif = player_VFD_score[1] - enemy_VFD_score[1]
+            return dif
         elif enemy.chosen_VFD == "Divination":
-            player.card_data["Finesse"] += 1
-            return "Player"
+            dif = (player_VFD_score[1] + 1) - (enemy_VFD_score[2] - 1)
+            return dif
     elif player.chosen_VFD == "Divination":
         if enemy.chosen_VFD == "Vitality":
-            player.card_data["Divination"] += 1
-            return "Player"
+            dif = (player_VFD_score[2] + 1) - (enemy_VFD_score[0] - 1)
+            return dif
         elif enemy.chosen_VFD == "Finesse":
-            enemy.card_data["Finesse"] += 1
-            return "Enemy"
+            dif = (player_VFD_score[2] - 1) - (enemy_VFD_score[1] + 1)
+            return dif
         elif enemy.chosen_VFD == "Divination":
-            return "Tie"
+            dif = player_VFD_score[2] - enemy_VFD_score[2]
+            return dif
 
 
 class Game(GameState):
@@ -64,6 +69,7 @@ class Game(GameState):
                 elif pc["Class Title"] == "Seer":
                     new_character = Seer(pc, col=x + 1, max_col=4, row=9, max_row=15)
                 new_character.flip_card()
+                new_character.front_image = new_character.generateTriblock(new_character.chosen_VFD)
                 new_character.switch_skill_to(new_character.chosen_VFD)
                 self.players_party.append(new_character)
                 self.all_buttons.append(new_character)
@@ -77,9 +83,8 @@ class Game(GameState):
                     new_character = Ranger(e, col=b + 1, max_col=4, row=2, max_row=15)
                 elif e["Class Title"] == "Seer":
                     new_character = Seer(e, col=b + 1, max_col=4, row=2, max_row=15)
-                new_character.card_data["Card Type"] = "Enemy Character"
-                new_character.front_image = new_character.generateImg()
-                new_character.front_image = pg.transform.flip(new_character.front_image, False, True)
+                new_character.card_type = "Enemy Character"
+                new_character.front_image = new_character.generateTriblock("Vitality")
                 self.enemys_party.append(new_character)
                 self.all_buttons.append(new_character)
                 b += 1
@@ -91,6 +96,8 @@ class Game(GameState):
             self.enemys_party = persistent["Enemy's Party"]
             for ec in self.enemys_party:
                 self.all_buttons.append(ec)
+        print(self.players_party)
+        print(self.enemys_party)
         super(Game, self).startup(persistent)
 
     def get_event(self, event: pg.event):
@@ -135,17 +142,12 @@ class Game(GameState):
                     if pc.selected:
                         pc.switch_skill_to("Divination")
 
-    def battle(self, player_char: Character, enemy_char: Character):
-        pass
-
     def character_combat(self, character_position: int):
+        print(character_position)
         player: Character = self.players_party[character_position]
         enemy: Character = self.enemys_party[character_position]
         if not player.hasBattled and not enemy.hasBattled:
-            compare_VFD_scores(player, enemy)
-            difference = player.card_data[player.chosen_VFD] - enemy.card_data[enemy.chosen_VFD]
-            print(player.card_data[player.chosen_VFD])
-            print(enemy.card_data[player.chosen_VFD])
+            difference = compare_chosen_VFD(player, enemy)
             enemy.isFaceUp = False
             enemy.flip_card()
             if difference > 0:

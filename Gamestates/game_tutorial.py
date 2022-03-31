@@ -32,7 +32,7 @@ class TutorialGame(Game):
             Tut.ZERO: ["Press \'n\' for the next tutorial step and \'b\' for previous step.", 15],
             Tut.ONE: ["These are your character Tri-blocks, you can select one at a time.", 13],
             Tut.TWO: ["You can click on them or press 1, 2, or 3 on the keypad.", 14],
-            Tut.THREE: ["Your Opponent has the same thing but hidden with a \'Class color\'.", 1],
+            Tut.THREE: ["Your Opponent also has Tri-blocks, they are hidden with a \'Class color\'.", 1],
             Tut.FOUR: ["Each Character has red, green, and blue stones attached to each corner.", 14],
             Tut.FIVE: ["Red shows how much vitality a character has.", 14],
             Tut.SIX: ["Green represents their finesse level.", 14],

@@ -67,13 +67,13 @@ class TextButton(Button):
     def set_font(self):
         self.font = pg.font.Font(self.fontname, self.font_size)
 
-    def set_button_option(self, optioncolor, optiontext):
-        self.optioncolor = optioncolor
-        self.optiontext = optiontext
-        if self.optiontext == "True":
-            self.optioncolor = LIGHT_SLATE_BLUE
-        elif self.optiontext == "False":
-            self.optioncolor = DARK_SLATE_BLUE
+    def set_button_option(self, option_color: pg.Color, option_text: str):
+        self.optioncolor = option_color
+        self.optiontext = option_text
+            
+    def set_button_value(self, value_color: pg.Color, value_text: str):
+        self.valuecolor = value_color
+        self.valuetext = value_text
 
     def render(self):
         """Render the text onto the image."""
